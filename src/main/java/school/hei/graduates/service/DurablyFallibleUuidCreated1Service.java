@@ -1,4 +1,4 @@
-package school.hei.graduates.service.event;
+package school.hei.graduates.service;
 
 import static java.lang.Thread.sleep;
 
