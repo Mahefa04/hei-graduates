@@ -1,6 +1,8 @@
 package school.hei.graduates.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -10,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import school.hei.graduates.entity.Track;
 
 @Entity
 @Table(name = "student_group")
@@ -25,4 +28,7 @@ public class Group {
     private UUID id;
 
     private String ref;
+
+    @Enumerated(EnumType.STRING)
+    private Track track;
 }
