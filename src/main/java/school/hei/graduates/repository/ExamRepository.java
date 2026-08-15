@@ -9,5 +9,5 @@ import school.hei.graduates.entity.Exam;
 @Repository
 public interface ExamRepository extends JpaRepository<Exam, UUID> {
 
-    List<Exam> findByCourse_Id(UUID courseId);
+    List<Exam> findByCourseOffering_Id(UUID courseOfferingId);
 }
