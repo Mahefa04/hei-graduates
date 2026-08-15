@@ -31,10 +31,10 @@ public class ExamController {
         return examService.getById(id);
     }
 
-    @GetMapping("/course/{courseId}")
-    public List<ExamResponse> getByCourseId(
-            @PathVariable UUID courseId) {
-        return examService.getByCourseId(courseId);
+    @GetMapping("/course-offering/{courseOfferingId}")
+    public List<ExamResponse> getByCourseOfferingId(
+            @PathVariable UUID courseOfferingId) {
+        return examService.getByCourseOfferingId(courseOfferingId);
     }
 
     @PutMapping
