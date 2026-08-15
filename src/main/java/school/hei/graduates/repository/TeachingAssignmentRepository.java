@@ -12,16 +12,10 @@ public interface TeachingAssignmentRepository
 
     List<TeachingAssignment> findByTeacher_Id(UUID teacherId);
 
-    List<TeachingAssignment> findByCourse_Id(UUID courseId);
+    List<TeachingAssignment> findByCourseOffering_Id(
+            UUID courseOfferingId);
 
-    List<TeachingAssignment> findByGroup_Id(UUID groupId);
-
-    boolean existsByTeacher_IdAndCourse_Id(
+    boolean existsByTeacher_IdAndCourseOffering_Id(
             UUID teacherId,
-            UUID courseId);
-
-    boolean existsByTeacher_IdAndCourse_IdAndGroup_Id(
-            UUID teacherId,
-            UUID courseId,
-            UUID groupId);
+            UUID courseOfferingId);
 }
