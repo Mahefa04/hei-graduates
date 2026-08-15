@@ -20,12 +20,13 @@ public class CourseOfferingMapper {
             Course course,
             Group group) {
 
-        return new CourseOffering(
-                request.id(),
-                course,
-                group,
-                request.semester(),
-                request.academicYear());
+        return CourseOffering.builder()
+                .id(request.id())
+                .course(course)
+                .group(group)
+                .semester(request.semester())
+                .academicYear(request.academicYear())
+                .build();
     }
 
     public CourseOfferingResponse toResponse(CourseOffering courseOffering) {
