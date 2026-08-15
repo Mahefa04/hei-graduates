@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import school.hei.graduates.endpoint.rest.model.TeachingAssignmentResponse;
 import school.hei.graduates.endpoint.rest.model.UpsertTeachingAssignment;
-import school.hei.graduates.entity.Course;
-import school.hei.graduates.entity.Group;
+import school.hei.graduates.entity.CourseOffering;
 import school.hei.graduates.entity.Teacher;
 import school.hei.graduates.entity.TeachingAssignment;
 
@@ -13,22 +12,18 @@ import school.hei.graduates.entity.TeachingAssignment;
 @AllArgsConstructor
 public class TeachingAssignmentMapper {
 
-    private final CourseMapper courseMapper;
+    private final CourseOfferingMapper courseOfferingMapper;
     private final TeacherMapper teacherMapper;
-    private final GroupMapper groupMapper;
 
     public TeachingAssignment toEntity(
             UpsertTeachingAssignment request,
-            Course course,
-            Teacher teacher,
-            Group group) {
+            CourseOffering courseOffering,
+            Teacher teacher) {
 
-        return TeachingAssignment.builder()
-                .id(request.id())
-                .course(course)
-                .teacher(teacher)
-                .group(group)
-                .build();
+        return new TeachingAssignment(
+                request.id(),
+                courseOffering,
+                teacher);
     }
 
     public TeachingAssignmentResponse toResponse(
@@ -36,8 +31,9 @@ public class TeachingAssignmentMapper {
 
         return new TeachingAssignmentResponse(
                 assignment.getId(),
-                courseMapper.toResponse(assignment.getCourse()),
-                teacherMapper.toResponse(assignment.getTeacher()),
-                groupMapper.toResponse(assignment.getGroup()));
+                courseOfferingMapper.toResponse(
+                        assignment.getCourseOffering()),
+                teacherMapper.toResponse(
+                        assignment.getTeacher()));
     }
 }
