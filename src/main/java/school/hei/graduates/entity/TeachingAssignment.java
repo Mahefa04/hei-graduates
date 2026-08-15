@@ -25,14 +25,10 @@ public class TeachingAssignment {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "course_offering_id", nullable = false)
+    private CourseOffering courseOffering;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
 }
