@@ -9,4 +9,4 @@ public record ExamResponse(
         String title,
         Instant examDate,
         BigDecimal coefficient,
-        CourseResponse course) {}
+        CourseOfferingResponse courseOffering) {}
