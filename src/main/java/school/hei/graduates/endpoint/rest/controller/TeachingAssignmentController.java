@@ -38,10 +38,10 @@ public class TeachingAssignmentController {
         return teachingAssignmentService.getByTeacherId(teacherId);
     }
 
-    @GetMapping("/course/{courseId}")
-    public List<TeachingAssignmentResponse> getByCourseId(
-            @PathVariable UUID courseId) {
-        return teachingAssignmentService.getByCourseId(courseId);
+    @GetMapping("/course-offering/{courseOfferingId}")
+    public List<TeachingAssignmentResponse> getByCourseOfferingId(
+            @PathVariable UUID courseOfferingId) {
+        return teachingAssignmentService.getByCourseOfferingId(courseOfferingId);
     }
 
     @PutMapping
