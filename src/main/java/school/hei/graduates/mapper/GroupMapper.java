@@ -9,10 +9,11 @@ import school.hei.graduates.entity.Group;
 public class GroupMapper {
 
     public Group toEntity(UpsertGroup request) {
-        return new Group(
-                request.id(),
-                request.ref(),
-                request.track());
+        return Group.builder()
+                .id(request.id())
+                .ref(request.ref())
+                .track(request.track())
+                .build();
     }
 
     public GroupResponse toResponse(Group group) {
