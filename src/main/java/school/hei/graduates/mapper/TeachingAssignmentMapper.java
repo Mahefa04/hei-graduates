@@ -20,10 +20,11 @@ public class TeachingAssignmentMapper {
             CourseOffering courseOffering,
             Teacher teacher) {
 
-        return new TeachingAssignment(
-                request.id(),
-                courseOffering,
-                teacher);
+        return TeachingAssignment.builder()
+                .id(request.id())
+                .courseOffering(courseOffering)
+                .teacher(teacher)
+                .build();
     }
 
     public TeachingAssignmentResponse toResponse(
