@@ -5,6 +5,5 @@ import java.util.UUID;
 
 public record UpsertTeachingAssignment(
         UUID id,
-        @NotNull UUID courseId,
-        @NotNull UUID teacherId,
-        @NotNull UUID groupId) {}
+        @NotNull UUID courseOfferingId,
+        @NotNull UUID teacherId) {}

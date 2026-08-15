@@ -4,6 +4,5 @@ import java.util.UUID;
 
 public record TeachingAssignmentResponse(
         UUID id,
-        CourseResponse course,
-        TeacherResponse teacher,
-        GroupResponse group) {}
+        CourseOfferingResponse courseOffering,
+        TeacherResponse teacher) {}
