@@ -33,6 +33,6 @@ public class Exam {
     private BigDecimal coefficient;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "course_offering_id", nullable = false)
+    private CourseOffering courseOffering;
 }
