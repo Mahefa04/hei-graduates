@@ -6,11 +6,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.hei.graduates.endpoint.rest.model.ExamResponse;
 import school.hei.graduates.endpoint.rest.model.UpsertExam;
-import school.hei.graduates.entity.Course;
+import school.hei.graduates.entity.CourseOffering;
 import school.hei.graduates.entity.Exam;
 import school.hei.graduates.exception.ResourceNotFoundException;
 import school.hei.graduates.mapper.ExamMapper;
-import school.hei.graduates.repository.CourseRepository;
+import school.hei.graduates.repository.CourseOfferingRepository;
 import school.hei.graduates.repository.ExamRepository;
 
 @Service
@@ -18,7 +18,7 @@ import school.hei.graduates.repository.ExamRepository;
 public class ExamService {
 
     private final ExamRepository examRepository;
-    private final CourseRepository courseRepository;
+    private final CourseOfferingRepository courseOfferingRepository;
     private final ExamMapper examMapper;
 
     public List<ExamResponse> getAll() {
@@ -31,28 +31,41 @@ public class ExamService {
         Exam exam =
                 examRepository
                         .findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Exam not found"));
+                        .orElseThrow(
+                                () -> new ResourceNotFoundException("Exam not found"));
 
         return examMapper.toResponse(exam);
     }
 
-    public List<ExamResponse> getByCourseId(UUID courseId) {
-        if (!courseRepository.existsById(courseId)) {
-            throw new ResourceNotFoundException("Course not found");
+    public List<ExamResponse> getByCourseOfferingId(
+            UUID courseOfferingId) {
+
+        if (!courseOfferingRepository.existsById(courseOfferingId)) {
+            throw new ResourceNotFoundException(
+                    "Course offering not found");
         }
 
-        return examRepository.findByCourse_Id(courseId).stream()
+        return examRepository
+                .findByCourseOffering_Id(courseOfferingId)
+                .stream()
                 .map(examMapper::toResponse)
                 .toList();
     }
 
     public ExamResponse upsert(UpsertExam request) {
-        Course course =
-                courseRepository
-                        .findById(request.courseId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
 
-        Exam exam = examMapper.toEntity(request, course);
+        CourseOffering courseOffering =
+                courseOfferingRepository
+                        .findById(request.courseOfferingId())
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Course offering not found"));
+
+        Exam exam =
+                examMapper.toEntity(
+                        request,
+                        courseOffering);
 
         Exam savedExam = examRepository.save(exam);
 
