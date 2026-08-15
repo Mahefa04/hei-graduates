@@ -33,7 +33,7 @@ public class CourseController {
     }
 
     @PutMapping
-    public CourseResponse upsert(@RequestBody UpsertCourse request) {
+    public CourseResponse upsert(@Valid @RequestBody UpsertCourse request) {
         return courseService.upsert(request);
     }
 }
