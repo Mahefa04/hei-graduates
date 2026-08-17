@@ -54,4 +54,14 @@ public class GradeController {
             @PathVariable UUID id, Principal principal) {
         return gradeService.getHistory(id, principal.getName());
     }
+
+    @GetMapping("/course-offering/{courseOfferingId}")
+    public List<GradeResponse> getByCourseOfferingId(
+            @PathVariable UUID courseOfferingId,
+            Principal principal) {
+
+        return gradeService.getByCourseOfferingId(
+                courseOfferingId,
+                principal.getName());
+    }
 }

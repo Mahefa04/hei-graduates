@@ -117,4 +117,32 @@ public class AuthorizationService {
         throw new ForbiddenException(
                 "You are not allowed to manage this grade");
     }
+
+    public void checkCanViewCourseOfferingGrades(
+            String email,
+            UUID courseOfferingId) {
+
+        User user = getUser(email);
+
+        if (user.getRole() == Role.ADMIN) {
+            return;
+        }
+
+        if (user.getRole() == Role.TEACHER
+                && user.getTeacher() != null) {
+
+            boolean teachesCourse =
+                    teachingAssignmentRepository
+                            .existsByTeacher_IdAndCourseOffering_Id(
+                                    user.getTeacher().getId(),
+                                    courseOfferingId);
+
+            if (teachesCourse) {
+                return;
+            }
+        }
+
+        throw new ForbiddenException(
+                "You are not allowed to view grades for this course offering");
+    }
 }

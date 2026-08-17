@@ -19,10 +19,7 @@ import school.hei.graduates.exception.ConflictException;
 import school.hei.graduates.exception.ResourceNotFoundException;
 import school.hei.graduates.mapper.GradeHistoryMapper;
 import school.hei.graduates.mapper.GradeMapper;
-import school.hei.graduates.repository.ExamRepository;
-import school.hei.graduates.repository.GradeHistoryRepository;
-import school.hei.graduates.repository.GradeRepository;
-import school.hei.graduates.repository.StudentRepository;
+import school.hei.graduates.repository.*;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +29,7 @@ public class GradeService {
     private final GradeHistoryRepository gradeHistoryRepository;
     private final StudentRepository studentRepository;
     private final ExamRepository examRepository;
+    private final CourseOfferingRepository courseOfferingRepository;
 
     private final GradeMapper gradeMapper;
     private final GradeHistoryMapper gradeHistoryMapper;
@@ -156,6 +154,26 @@ public class GradeService {
                 .findByGrade_IdOrderByModifiedAtAsc(gradeId)
                 .stream()
                 .map(gradeHistoryMapper::toResponse)
+                .toList();
+    }
+
+    public List<GradeResponse> getByCourseOfferingId(
+            UUID courseOfferingId,
+            String email) {
+
+        if (!courseOfferingRepository.existsById(courseOfferingId)) {
+            throw new ResourceNotFoundException(
+                    "Course offering not found");
+        }
+
+        authorizationService.checkCanViewCourseOfferingGrades(
+                email,
+                courseOfferingId);
+
+        return gradeRepository
+                .findByExam_CourseOffering_Id(courseOfferingId)
+                .stream()
+                .map(gradeMapper::toResponse)
                 .toList();
     }
 }
