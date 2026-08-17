@@ -1,4 +1,4 @@
-package school.hei.graduates.entity.enums;
+package school.hei.graduates.entity;
 
 public enum Role {
     STUDENT,
