@@ -26,37 +26,32 @@ public class GradeController {
     private final GradeService gradeService;
 
     @GetMapping("/{id}")
-    public GradeResponse getById(@PathVariable UUID id) {
-        return gradeService.getById(id);
+    public GradeResponse getById(@PathVariable UUID id, Principal principal) {
+        return gradeService.getById(id, principal.getName());
     }
 
     @GetMapping("/student/{studentId}")
     public List<GradeResponse> getByStudentId(
-            @PathVariable UUID studentId) {
-        return gradeService.getByStudentId(studentId);
+            @PathVariable UUID studentId, Principal principal) {
+        return gradeService.getByStudentId(studentId, principal.getName());
     }
 
     @PostMapping
     public GradeResponse create(
-            @Valid @RequestBody CreateGrade request) {
-        return gradeService.create(request);
+            @Valid @RequestBody CreateGrade request, Principal principal) {
+        return gradeService.create(request, principal.getName());
     }
 
     @PatchMapping("/{id}")
     public GradeResponse update(
             @PathVariable UUID id,
-            @Valid @RequestBody UpdateGrade request,
-            Principal principal) {
-
-        return gradeService.update(
-                id,
-                request,
-                principal.getName());
+            @Valid @RequestBody UpdateGrade request, Principal principal) {
+        return gradeService.update(id, request, principal.getName());
     }
 
     @GetMapping("/{id}/history")
     public List<GradeHistoryResponse> getHistory(
-            @PathVariable UUID id) {
-        return gradeService.getHistory(id);
+            @PathVariable UUID id, Principal principal) {
+        return gradeService.getHistory(id, principal.getName());
     }
 }
