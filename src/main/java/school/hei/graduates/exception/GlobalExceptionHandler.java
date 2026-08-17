@@ -45,4 +45,16 @@ public class GlobalExceptionHandler {
                                 "message", exception.getMessage(),
                                 "timestamp", Instant.now().toString()));
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Map<String, Object>> handleForbidden(
+            ForbiddenException exception) {
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(
+                        Map.of(
+                                "status", 403,
+                                "message", exception.getMessage(),
+                                "timestamp", Instant.now().toString()));
+    }
 }
