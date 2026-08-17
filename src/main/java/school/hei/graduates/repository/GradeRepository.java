@@ -20,4 +20,6 @@ public interface GradeRepository extends JpaRepository<Grade, UUID> {
     );
 
     List<Grade> findByExam_CourseOffering_Id(UUID courseOfferingId);
+
+    List<Grade> findByStudent_IdAndExam_CourseOffering_Id(UUID studentId, UUID courseOfferingId);
 }
