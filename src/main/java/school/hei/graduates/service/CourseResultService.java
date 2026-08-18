@@ -10,6 +10,8 @@ import school.hei.graduates.endpoint.rest.model.CourseResultResponse;
 import school.hei.graduates.entity.CourseOffering;
 import school.hei.graduates.entity.Exam;
 import school.hei.graduates.entity.Grade;
+import school.hei.graduates.entity.StudentGroupHistory;
+import school.hei.graduates.exception.BadRequestException;
 import school.hei.graduates.exception.ResourceNotFoundException;
 import school.hei.graduates.mapper.CourseOfferingMapper;
 import school.hei.graduates.repository.*;
@@ -21,8 +23,9 @@ public class CourseResultService {
     private final StudentRepository studentRepository;
     private final CourseOfferingRepository courseOfferingRepository;
     private final ExamRepository examRepository;
-    private final TeacherRepository.GradeRepository gradeRepository;
+    private final GradeRepository gradeRepository;
     private final CourseOfferingMapper courseOfferingMapper;
+    private final StudentGroupHistoryRepository historyRepository;
 
     public CourseResultResponse getResult(
             UUID studentId,
@@ -37,6 +40,14 @@ public class CourseResultService {
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Course offering not found"));
+
+        if (!studentWasInGroup(
+                studentId,
+                courseOffering.getGroup().getId())) {
+
+            throw new BadRequestException(
+                    "Student was not in this group");
+        }
 
         List<Exam> exams = examRepository.findByCourseOffering_Id(courseOfferingId);
 
@@ -97,5 +108,23 @@ public class CourseResultService {
                 grades.size() == exams.size();
 
         return coefficientsComplete && allGradesPresent;
+    }
+
+    private boolean studentWasInGroup(
+            UUID studentId,
+            UUID groupId) {
+
+        List<StudentGroupHistory> histories =
+                historyRepository
+                        .findByStudent_IdOrderByStartDateAsc(studentId);
+
+        for (StudentGroupHistory history : histories) {
+
+            if (history.getGroup().getId().equals(groupId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
