@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import school.hei.graduates.entity.Track;
 
 @Entity
 @Table(name = "student_group")
