@@ -8,14 +8,9 @@ import org.springframework.stereotype.Repository;
 import school.hei.graduates.entity.StudentGroupHistory;
 
 @Repository
-public interface StudentGroupHistoryRepository
-        extends JpaRepository<StudentGroupHistory, UUID> {
+public interface StudentGroupHistoryRepository extends JpaRepository<StudentGroupHistory, UUID> {
 
-    List<StudentGroupHistory> findByStudent_IdOrderByStartDateAsc(
-            UUID studentId
-    );
+  List<StudentGroupHistory> findByStudent_IdOrderByStartDateAsc(UUID studentId);
 
-    Optional<StudentGroupHistory> findFirstByStudent_IdAndEndDateIsNull(
-            UUID studentId
-    );
+  Optional<StudentGroupHistory> findFirstByStudent_IdAndEndDateIsNull(UUID studentId);
 }

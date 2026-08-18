@@ -23,45 +23,38 @@ import school.hei.graduates.service.GradeService;
 @AllArgsConstructor
 public class GradeController {
 
-    private final GradeService gradeService;
+  private final GradeService gradeService;
 
-    @GetMapping("/{id}")
-    public GradeResponse getById(@PathVariable UUID id, Principal principal) {
-        return gradeService.getById(id, principal.getName());
-    }
+  @GetMapping("/{id}")
+  public GradeResponse getById(@PathVariable UUID id, Principal principal) {
+    return gradeService.getById(id, principal.getName());
+  }
 
-    @GetMapping("/student/{studentId}")
-    public List<GradeResponse> getByStudentId(
-            @PathVariable UUID studentId, Principal principal) {
-        return gradeService.getByStudentId(studentId, principal.getName());
-    }
+  @GetMapping("/student/{studentId}")
+  public List<GradeResponse> getByStudentId(@PathVariable UUID studentId, Principal principal) {
+    return gradeService.getByStudentId(studentId, principal.getName());
+  }
 
-    @PostMapping
-    public GradeResponse create(
-            @Valid @RequestBody CreateGrade request, Principal principal) {
-        return gradeService.create(request, principal.getName());
-    }
+  @PostMapping
+  public GradeResponse create(@Valid @RequestBody CreateGrade request, Principal principal) {
+    return gradeService.create(request, principal.getName());
+  }
 
-    @PatchMapping("/{id}")
-    public GradeResponse update(
-            @PathVariable UUID id,
-            @Valid @RequestBody UpdateGrade request, Principal principal) {
-        return gradeService.update(id, request, principal.getName());
-    }
+  @PatchMapping("/{id}")
+  public GradeResponse update(
+      @PathVariable UUID id, @Valid @RequestBody UpdateGrade request, Principal principal) {
+    return gradeService.update(id, request, principal.getName());
+  }
 
-    @GetMapping("/{id}/history")
-    public List<GradeHistoryResponse> getHistory(
-            @PathVariable UUID id, Principal principal) {
-        return gradeService.getHistory(id, principal.getName());
-    }
+  @GetMapping("/{id}/history")
+  public List<GradeHistoryResponse> getHistory(@PathVariable UUID id, Principal principal) {
+    return gradeService.getHistory(id, principal.getName());
+  }
 
-    @GetMapping("/course-offering/{courseOfferingId}")
-    public List<GradeResponse> getByCourseOfferingId(
-            @PathVariable UUID courseOfferingId,
-            Principal principal) {
+  @GetMapping("/course-offering/{courseOfferingId}")
+  public List<GradeResponse> getByCourseOfferingId(
+      @PathVariable UUID courseOfferingId, Principal principal) {
 
-        return gradeService.getByCourseOfferingId(
-                courseOfferingId,
-                principal.getName());
-    }
+    return gradeService.getByCourseOfferingId(courseOfferingId, principal.getName());
+  }
 }

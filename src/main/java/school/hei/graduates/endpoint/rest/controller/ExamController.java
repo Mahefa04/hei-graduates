@@ -19,27 +19,25 @@ import school.hei.graduates.service.ExamService;
 @AllArgsConstructor
 public class ExamController {
 
-    private final ExamService examService;
+  private final ExamService examService;
 
-    @GetMapping
-    public List<ExamResponse> getAll() {
-        return examService.getAll();
-    }
+  @GetMapping
+  public List<ExamResponse> getAll() {
+    return examService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public ExamResponse getById(@PathVariable UUID id) {
-        return examService.getById(id);
-    }
+  @GetMapping("/{id}")
+  public ExamResponse getById(@PathVariable UUID id) {
+    return examService.getById(id);
+  }
 
-    @GetMapping("/course-offering/{courseOfferingId}")
-    public List<ExamResponse> getByCourseOfferingId(
-            @PathVariable UUID courseOfferingId) {
-        return examService.getByCourseOfferingId(courseOfferingId);
-    }
+  @GetMapping("/course-offering/{courseOfferingId}")
+  public List<ExamResponse> getByCourseOfferingId(@PathVariable UUID courseOfferingId) {
+    return examService.getByCourseOfferingId(courseOfferingId);
+  }
 
-    @PutMapping
-    public ExamResponse upsert(
-            @Valid @RequestBody UpsertExam request) {
-        return examService.upsert(request);
-    }
+  @PutMapping
+  public ExamResponse upsert(@Valid @RequestBody UpsertExam request) {
+    return examService.upsert(request);
+  }
 }

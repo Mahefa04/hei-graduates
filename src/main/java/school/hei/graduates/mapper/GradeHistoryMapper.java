@@ -7,16 +7,15 @@ import school.hei.graduates.entity.GradeHistory;
 @Component
 public class GradeHistoryMapper {
 
-    public GradeHistoryResponse toResponse(
-            GradeHistory history) {
+  public GradeHistoryResponse toResponse(GradeHistory history) {
 
-        return new GradeHistoryResponse(
-                history.getId(),
-                history.getGrade().getId(),
-                history.getOldValue(),
-                history.getNewValue(),
-                history.getReason(),
-                history.getModifiedBy(),
-                history.getModifiedAt());
-    }
+    return new GradeHistoryResponse(
+        history.getId(),
+        history.getGrade().getId(),
+        history.getOldValue(),
+        history.getNewValue(),
+        history.getReason(),
+        history.getModifiedBy(),
+        history.getModifiedAt());
+  }
 }

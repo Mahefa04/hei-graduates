@@ -16,133 +16,105 @@ import school.hei.graduates.repository.UserRepository;
 @AllArgsConstructor
 public class AuthorizationService {
 
-    private final UserRepository userRepository;
-    private final TeachingAssignmentRepository teachingAssignmentRepository;
+  private final UserRepository userRepository;
+  private final TeachingAssignmentRepository teachingAssignmentRepository;
 
-    private User getUser(String email) {
-        return userRepository
-                .findByEmail(email)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("User not found"));
+  private User getUser(String email) {
+    return userRepository
+        .findByEmail(email)
+        .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+  }
+
+  public void checkCanViewStudentGrades(String email, UUID studentId) {
+
+    User user = getUser(email);
+
+    if (user.getRole() == Role.ADMIN) {
+      return;
     }
 
-    public void checkCanViewStudentGrades(
-            String email,
-            UUID studentId) {
-
-        User user = getUser(email);
-
-        if (user.getRole() == Role.ADMIN) {
-            return;
-        }
-
-        if (user.getRole() == Role.STUDENT
-                && user.getStudent() != null
-                && user.getStudent().getId().equals(studentId)) {
-            return;
-        }
-
-        throw new ForbiddenException(
-                "You are not allowed to view these grades");
+    if (user.getRole() == Role.STUDENT
+        && user.getStudent() != null
+        && user.getStudent().getId().equals(studentId)) {
+      return;
     }
 
-    public void checkCanViewGrade(
-            String email,
-            Grade grade) {
+    throw new ForbiddenException("You are not allowed to view these grades");
+  }
 
-        User user = getUser(email);
+  public void checkCanViewGrade(String email, Grade grade) {
 
-        if (user.getRole() == Role.ADMIN) {
-            return;
-        }
+    User user = getUser(email);
 
-        if (user.getRole() == Role.STUDENT
-                && user.getStudent() != null
-                && user.getStudent().getId().equals(
-                grade.getStudent().getId())) {
-            return;
-        }
-
-        if (user.getRole() == Role.TEACHER
-                && user.getTeacher() != null) {
-
-            UUID courseOfferingId =
-                    grade
-                            .getExam()
-                            .getCourseOffering()
-                            .getId();
-
-            boolean teachesCourse =
-                    teachingAssignmentRepository
-                            .existsByTeacher_IdAndCourseOffering_Id(
-                                    user.getTeacher().getId(),
-                                    courseOfferingId);
-
-            if (teachesCourse) {
-                return;
-            }
-        }
-
-        throw new ForbiddenException(
-                "You are not allowed to view this grade");
+    if (user.getRole() == Role.ADMIN) {
+      return;
     }
 
-    public void checkCanManageGrade(
-            String email,
-            Exam exam) {
-
-        User user = getUser(email);
-
-        if (user.getRole() == Role.ADMIN) {
-            return;
-        }
-
-        if (user.getRole() == Role.TEACHER
-                && user.getTeacher() != null) {
-
-            UUID courseOfferingId =
-                    exam.getCourseOffering().getId();
-
-            boolean teachesCourse =
-                    teachingAssignmentRepository
-                            .existsByTeacher_IdAndCourseOffering_Id(
-                                    user.getTeacher().getId(),
-                                    courseOfferingId);
-
-            if (teachesCourse) {
-                return;
-            }
-        }
-
-        throw new ForbiddenException(
-                "You are not allowed to manage this grade");
+    if (user.getRole() == Role.STUDENT
+        && user.getStudent() != null
+        && user.getStudent().getId().equals(grade.getStudent().getId())) {
+      return;
     }
 
-    public void checkCanViewCourseOfferingGrades(
-            String email,
-            UUID courseOfferingId) {
+    if (user.getRole() == Role.TEACHER && user.getTeacher() != null) {
 
-        User user = getUser(email);
+      UUID courseOfferingId = grade.getExam().getCourseOffering().getId();
 
-        if (user.getRole() == Role.ADMIN) {
-            return;
-        }
+      boolean teachesCourse =
+          teachingAssignmentRepository.existsByTeacher_IdAndCourseOffering_Id(
+              user.getTeacher().getId(), courseOfferingId);
 
-        if (user.getRole() == Role.TEACHER
-                && user.getTeacher() != null) {
-
-            boolean teachesCourse =
-                    teachingAssignmentRepository
-                            .existsByTeacher_IdAndCourseOffering_Id(
-                                    user.getTeacher().getId(),
-                                    courseOfferingId);
-
-            if (teachesCourse) {
-                return;
-            }
-        }
-
-        throw new ForbiddenException(
-                "You are not allowed to view grades for this course offering");
+      if (teachesCourse) {
+        return;
+      }
     }
+
+    throw new ForbiddenException("You are not allowed to view this grade");
+  }
+
+  public void checkCanManageGrade(String email, Exam exam) {
+
+    User user = getUser(email);
+
+    if (user.getRole() == Role.ADMIN) {
+      return;
+    }
+
+    if (user.getRole() == Role.TEACHER && user.getTeacher() != null) {
+
+      UUID courseOfferingId = exam.getCourseOffering().getId();
+
+      boolean teachesCourse =
+          teachingAssignmentRepository.existsByTeacher_IdAndCourseOffering_Id(
+              user.getTeacher().getId(), courseOfferingId);
+
+      if (teachesCourse) {
+        return;
+      }
+    }
+
+    throw new ForbiddenException("You are not allowed to manage this grade");
+  }
+
+  public void checkCanViewCourseOfferingGrades(String email, UUID courseOfferingId) {
+
+    User user = getUser(email);
+
+    if (user.getRole() == Role.ADMIN) {
+      return;
+    }
+
+    if (user.getRole() == Role.TEACHER && user.getTeacher() != null) {
+
+      boolean teachesCourse =
+          teachingAssignmentRepository.existsByTeacher_IdAndCourseOffering_Id(
+              user.getTeacher().getId(), courseOfferingId);
+
+      if (teachesCourse) {
+        return;
+      }
+    }
+
+    throw new ForbiddenException("You are not allowed to view grades for this course offering");
+  }
 }

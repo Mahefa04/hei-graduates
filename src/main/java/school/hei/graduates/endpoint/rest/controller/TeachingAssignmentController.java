@@ -19,34 +19,31 @@ import school.hei.graduates.service.TeachingAssignmentService;
 @AllArgsConstructor
 public class TeachingAssignmentController {
 
-    private final TeachingAssignmentService teachingAssignmentService;
+  private final TeachingAssignmentService teachingAssignmentService;
 
-    @GetMapping
-    public List<TeachingAssignmentResponse> getAll() {
-        return teachingAssignmentService.getAll();
-    }
+  @GetMapping
+  public List<TeachingAssignmentResponse> getAll() {
+    return teachingAssignmentService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public TeachingAssignmentResponse getById(
-            @PathVariable UUID id) {
-        return teachingAssignmentService.getById(id);
-    }
+  @GetMapping("/{id}")
+  public TeachingAssignmentResponse getById(@PathVariable UUID id) {
+    return teachingAssignmentService.getById(id);
+  }
 
-    @GetMapping("/teacher/{teacherId}")
-    public List<TeachingAssignmentResponse> getByTeacherId(
-            @PathVariable UUID teacherId) {
-        return teachingAssignmentService.getByTeacherId(teacherId);
-    }
+  @GetMapping("/teacher/{teacherId}")
+  public List<TeachingAssignmentResponse> getByTeacherId(@PathVariable UUID teacherId) {
+    return teachingAssignmentService.getByTeacherId(teacherId);
+  }
 
-    @GetMapping("/course-offering/{courseOfferingId}")
-    public List<TeachingAssignmentResponse> getByCourseOfferingId(
-            @PathVariable UUID courseOfferingId) {
-        return teachingAssignmentService.getByCourseOfferingId(courseOfferingId);
-    }
+  @GetMapping("/course-offering/{courseOfferingId}")
+  public List<TeachingAssignmentResponse> getByCourseOfferingId(
+      @PathVariable UUID courseOfferingId) {
+    return teachingAssignmentService.getByCourseOfferingId(courseOfferingId);
+  }
 
-    @PutMapping
-    public TeachingAssignmentResponse upsert(
-            @Valid @RequestBody UpsertTeachingAssignment request) {
-        return teachingAssignmentService.upsert(request);
-    }
+  @PutMapping
+  public TeachingAssignmentResponse upsert(@Valid @RequestBody UpsertTeachingAssignment request) {
+    return teachingAssignmentService.upsert(request);
+  }
 }

@@ -13,25 +13,23 @@ import lombok.*;
 @AllArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @Column(nullable = false)
-    private String password;
+  @Column(nullable = false)
+  private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
 
-    @OneToOne
-    @JoinColumn(name = "student_id", unique = true)
-    private Student student;
+  @OneToOne
+  @JoinColumn(name = "student_id", unique = true)
+  private Student student;
 
-    @OneToOne
-    @JoinColumn(name = "teacher_id", unique = true)
-    private Teacher teacher;
+  @OneToOne
+  @JoinColumn(name = "teacher_id", unique = true)
+  private Teacher teacher;
 }

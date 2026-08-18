@@ -20,111 +20,86 @@ import school.hei.graduates.repository.*;
 @AllArgsConstructor
 public class CourseResultService {
 
-    private final StudentRepository studentRepository;
-    private final CourseOfferingRepository courseOfferingRepository;
-    private final ExamRepository examRepository;
-    private final GradeRepository gradeRepository;
-    private final CourseOfferingMapper courseOfferingMapper;
-    private final StudentGroupHistoryRepository historyRepository;
+  private final StudentRepository studentRepository;
+  private final CourseOfferingRepository courseOfferingRepository;
+  private final ExamRepository examRepository;
+  private final GradeRepository gradeRepository;
+  private final CourseOfferingMapper courseOfferingMapper;
+  private final StudentGroupHistoryRepository historyRepository;
 
-    public CourseResultResponse getResult(
-            UUID studentId,
-            UUID courseOfferingId) {
+  public CourseResultResponse getResult(UUID studentId, UUID courseOfferingId) {
 
-        if (!studentRepository.existsById(studentId)) {
-            throw new ResourceNotFoundException("Student not found");
-        }
-
-        CourseOffering courseOffering =
-                courseOfferingRepository.findById(courseOfferingId)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Course offering not found"));
-
-        if (!studentWasInGroup(
-                studentId,
-                courseOffering.getGroup().getId())) {
-
-            throw new BadRequestException(
-                    "Student was not in this group");
-        }
-
-        List<Exam> exams = examRepository.findByCourseOffering_Id(courseOfferingId);
-
-        List<Grade> grades = gradeRepository.findByStudent_IdAndExam_CourseOffering_Id(studentId, courseOfferingId);
-
-        BigDecimal weightedSum = BigDecimal.ZERO;
-        BigDecimal completedCoefficient = BigDecimal.ZERO;
-
-        for (Grade grade : grades) {
-            BigDecimal coefficient =
-                    grade.getExam().getCoefficient();
-
-            BigDecimal weightedGrade =
-                    grade.getValue().multiply(coefficient);
-
-            weightedSum =
-                    weightedSum.add(weightedGrade);
-
-            completedCoefficient =
-                    completedCoefficient.add(coefficient);
-        }
-
-        BigDecimal average = BigDecimal.ZERO;
-
-        if (completedCoefficient.compareTo(BigDecimal.ZERO) > 0) {
-            average =
-                    weightedSum.divide(
-                            completedCoefficient,
-                            2,
-                            RoundingMode.HALF_UP);
-        }
-
-        boolean complete =
-                isComplete(exams, grades);
-
-        return new CourseResultResponse(
-                studentId,
-                courseOfferingMapper.toResponse(courseOffering),
-                average,
-                complete);
+    if (!studentRepository.existsById(studentId)) {
+      throw new ResourceNotFoundException("Student not found");
     }
 
-    private boolean isComplete(
-            List<Exam> exams,
-            List<Grade> grades) {
+    CourseOffering courseOffering =
+        courseOfferingRepository
+            .findById(courseOfferingId)
+            .orElseThrow(() -> new ResourceNotFoundException("Course offering not found"));
 
-        BigDecimal totalCoefficient = BigDecimal.ZERO;
+    if (!studentWasInGroup(studentId, courseOffering.getGroup().getId())) {
 
-        for (Exam exam : exams) {
-            totalCoefficient =
-                    totalCoefficient.add(exam.getCoefficient());
-        }
-
-        boolean coefficientsComplete =
-                totalCoefficient.compareTo(BigDecimal.ONE) == 0;
-
-        boolean allGradesPresent =
-                grades.size() == exams.size();
-
-        return coefficientsComplete && allGradesPresent;
+      throw new BadRequestException("Student was not in this group");
     }
 
-    private boolean studentWasInGroup(
-            UUID studentId,
-            UUID groupId) {
+    List<Exam> exams = examRepository.findByCourseOffering_Id(courseOfferingId);
 
-        List<StudentGroupHistory> histories =
-                historyRepository
-                        .findByStudent_IdOrderByStartDateAsc(studentId);
+    List<Grade> grades =
+        gradeRepository.findByStudent_IdAndExam_CourseOffering_Id(studentId, courseOfferingId);
 
-        for (StudentGroupHistory history : histories) {
+    BigDecimal weightedSum = BigDecimal.ZERO;
+    BigDecimal completedCoefficient = BigDecimal.ZERO;
 
-            if (history.getGroup().getId().equals(groupId)) {
-                return true;
-            }
-        }
+    for (Grade grade : grades) {
+      BigDecimal coefficient = grade.getExam().getCoefficient();
 
-        return false;
+      BigDecimal weightedGrade = grade.getValue().multiply(coefficient);
+
+      weightedSum = weightedSum.add(weightedGrade);
+
+      completedCoefficient = completedCoefficient.add(coefficient);
     }
+
+    BigDecimal average = BigDecimal.ZERO;
+
+    if (completedCoefficient.compareTo(BigDecimal.ZERO) > 0) {
+      average = weightedSum.divide(completedCoefficient, 2, RoundingMode.HALF_UP);
+    }
+
+    boolean complete = isComplete(exams, grades);
+
+    return new CourseResultResponse(
+        studentId, courseOfferingMapper.toResponse(courseOffering), average, complete);
+  }
+
+  private boolean isComplete(List<Exam> exams, List<Grade> grades) {
+
+    BigDecimal totalCoefficient = BigDecimal.ZERO;
+
+    for (Exam exam : exams) {
+      totalCoefficient = totalCoefficient.add(exam.getCoefficient());
+    }
+
+    boolean coefficientsComplete = totalCoefficient.compareTo(BigDecimal.ONE) == 0;
+
+    boolean allGradesPresent = grades.size() == exams.size();
+
+    return coefficientsComplete && allGradesPresent;
+  }
+
+  private boolean studentWasInGroup(UUID studentId, UUID groupId) {
+
+    List<StudentGroupHistory> histories =
+        historyRepository.findByStudent_IdOrderByStartDateAsc(studentId);
+
+    for (StudentGroupHistory history : histories) {
+
+      if (history.getGroup().getId().equals(groupId)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

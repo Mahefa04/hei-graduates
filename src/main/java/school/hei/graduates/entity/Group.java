@@ -22,12 +22,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Group {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    private String ref;
+  private String ref;
 
-    @Enumerated(EnumType.STRING)
-    private Track track;
+  @Enumerated(EnumType.STRING)
+  private Track track;
 }

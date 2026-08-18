@@ -12,29 +12,26 @@ import school.hei.graduates.entity.Group;
 @AllArgsConstructor
 public class CourseOfferingMapper {
 
-    private final CourseMapper courseMapper;
-    private final GroupMapper groupMapper;
+  private final CourseMapper courseMapper;
+  private final GroupMapper groupMapper;
 
-    public CourseOffering toEntity(
-            UpsertCourseOffering request,
-            Course course,
-            Group group) {
+  public CourseOffering toEntity(UpsertCourseOffering request, Course course, Group group) {
 
-        return CourseOffering.builder()
-                .id(request.id())
-                .course(course)
-                .group(group)
-                .semester(request.semester())
-                .academicYear(request.academicYear())
-                .build();
-    }
+    return CourseOffering.builder()
+        .id(request.id())
+        .course(course)
+        .group(group)
+        .semester(request.semester())
+        .academicYear(request.academicYear())
+        .build();
+  }
 
-    public CourseOfferingResponse toResponse(CourseOffering courseOffering) {
-        return new CourseOfferingResponse(
-                courseOffering.getId(),
-                courseMapper.toResponse(courseOffering.getCourse()),
-                groupMapper.toResponse(courseOffering.getGroup()),
-                courseOffering.getSemester(),
-                courseOffering.getAcademicYear());
-    }
+  public CourseOfferingResponse toResponse(CourseOffering courseOffering) {
+    return new CourseOfferingResponse(
+        courseOffering.getId(),
+        courseMapper.toResponse(courseOffering.getCourse()),
+        groupMapper.toResponse(courseOffering.getGroup()),
+        courseOffering.getSemester(),
+        courseOffering.getAcademicYear());
+  }
 }

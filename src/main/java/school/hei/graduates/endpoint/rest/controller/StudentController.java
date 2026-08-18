@@ -21,43 +21,37 @@ import school.hei.graduates.service.StudentService;
 @AllArgsConstructor
 public class StudentController {
 
-    private final StudentService studentService;
+  private final StudentService studentService;
 
-    @GetMapping
-    public List<StudentResponse> getAll() {
-        return studentService.getAll();
-    }
+  @GetMapping
+  public List<StudentResponse> getAll() {
+    return studentService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public StudentResponse getById(@PathVariable UUID id) {
-        return studentService.getById(id);
-    }
+  @GetMapping("/{id}")
+  public StudentResponse getById(@PathVariable UUID id) {
+    return studentService.getById(id);
+  }
 
-    @GetMapping("/promotion/{promotionId}")
-    public List<StudentResponse> getByPromotionId(
-            @PathVariable UUID promotionId) {
-        return studentService.getByPromotionId(promotionId);
-    }
+  @GetMapping("/promotion/{promotionId}")
+  public List<StudentResponse> getByPromotionId(@PathVariable UUID promotionId) {
+    return studentService.getByPromotionId(promotionId);
+  }
 
-    @PutMapping
-    public StudentResponse upsert(
-            @Valid @RequestBody UpsertStudent request) {
-        return studentService.upsert(request);
-    }
+  @PutMapping
+  public StudentResponse upsert(@Valid @RequestBody UpsertStudent request) {
+    return studentService.upsert(request);
+  }
 
-    @GetMapping("/{studentId}/group-history")
-    public List<StudentGroupHistoryResponse> getGroupHistory(
-            @PathVariable UUID studentId) {
-        return studentService.getGroupHistory(studentId);
-    }
+  @GetMapping("/{studentId}/group-history")
+  public List<StudentGroupHistoryResponse> getGroupHistory(@PathVariable UUID studentId) {
+    return studentService.getGroupHistory(studentId);
+  }
 
-    @PutMapping("/{studentId}/group")
-    public StudentGroupHistoryResponse changeGroup(
-            @PathVariable UUID studentId,
-            @Valid @RequestBody ChangeStudentGroup request) {
+  @PutMapping("/{studentId}/group")
+  public StudentGroupHistoryResponse changeGroup(
+      @PathVariable UUID studentId, @Valid @RequestBody ChangeStudentGroup request) {
 
-        return studentService.changeGroup(
-                studentId,
-                request.groupId());
-    }
+    return studentService.changeGroup(studentId, request.groupId());
+  }
 }

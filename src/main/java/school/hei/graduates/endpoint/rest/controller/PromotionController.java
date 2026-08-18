@@ -19,21 +19,20 @@ import school.hei.graduates.service.PromotionService;
 @AllArgsConstructor
 public class PromotionController {
 
-    private final PromotionService promotionService;
+  private final PromotionService promotionService;
 
-    @GetMapping
-    public List<PromotionResponse> getAll() {
-        return promotionService.getAll();
-    }
+  @GetMapping
+  public List<PromotionResponse> getAll() {
+    return promotionService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public PromotionResponse getById(@PathVariable UUID id) {
-        return promotionService.getById(id);
-    }
+  @GetMapping("/{id}")
+  public PromotionResponse getById(@PathVariable UUID id) {
+    return promotionService.getById(id);
+  }
 
-    @PutMapping
-    public PromotionResponse upsert(
-            @Valid @RequestBody UpsertPromotion request) {
-        return promotionService.upsert(request);
-    }
+  @PutMapping
+  public PromotionResponse upsert(@Valid @RequestBody UpsertPromotion request) {
+    return promotionService.upsert(request);
+  }
 }

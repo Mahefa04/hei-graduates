@@ -20,15 +20,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TeachingAssignment {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "course_offering_id", nullable = false)
-    private CourseOffering courseOffering;
+  @ManyToOne
+  @JoinColumn(name = "course_offering_id", nullable = false)
+  private CourseOffering courseOffering;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
+  @ManyToOne
+  @JoinColumn(name = "teacher_id", nullable = false)
+  private Teacher teacher;
 }

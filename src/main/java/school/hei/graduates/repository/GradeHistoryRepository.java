@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 import school.hei.graduates.entity.GradeHistory;
 
 @Repository
-public interface GradeHistoryRepository
-        extends JpaRepository<GradeHistory, UUID> {
+public interface GradeHistoryRepository extends JpaRepository<GradeHistory, UUID> {
 
-    List<GradeHistory> findByGrade_IdOrderByModifiedAtAsc(UUID gradeId);
+  List<GradeHistory> findByGrade_IdOrderByModifiedAtAsc(UUID gradeId);
 }

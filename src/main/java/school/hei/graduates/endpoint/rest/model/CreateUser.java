@@ -7,8 +7,8 @@ import java.util.UUID;
 import school.hei.graduates.entity.Role;
 
 public record CreateUser(
-        @NotBlank @Email String email,
-        @NotBlank String password,
-        @NotNull Role role,
-        UUID studentId,
-        UUID teacherId) {}
+    @NotBlank @Email String email,
+    @NotBlank String password,
+    @NotNull Role role,
+    UUID studentId,
+    UUID teacherId) {}

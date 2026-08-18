@@ -7,8 +7,4 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record UpdateGrade(
-        @NotNull
-        @DecimalMin("0.0")
-        @DecimalMax("20.0")
-        BigDecimal value,
-        @NotBlank String reason) {}
+    @NotNull @DecimalMin("0.0") @DecimalMax("20.0") BigDecimal value, @NotBlank String reason) {}

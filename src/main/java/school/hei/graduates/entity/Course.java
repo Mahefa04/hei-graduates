@@ -18,13 +18,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Course {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    private String ref;
+  private String ref;
 
-    private String title;
+  private String title;
 
-    private int credits;
+  private int credits;
 }

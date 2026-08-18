@@ -6,8 +6,8 @@ import java.util.UUID;
 import school.hei.graduates.entity.Semester;
 
 public record UpsertCourseOffering(
-        UUID id,
-        @NotNull UUID courseId,
-        @NotNull UUID groupId,
-        @NotNull Semester semester,
-        @NotBlank String academicYear) {}
+    UUID id,
+    @NotNull UUID courseId,
+    @NotNull UUID groupId,
+    @NotNull Semester semester,
+    @NotBlank String academicYear) {}

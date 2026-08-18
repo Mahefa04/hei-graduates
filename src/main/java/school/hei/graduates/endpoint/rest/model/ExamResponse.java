@@ -5,8 +5,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record ExamResponse(
-        UUID id,
-        String title,
-        Instant examDate,
-        BigDecimal coefficient,
-        CourseOfferingResponse courseOffering) {}
+    UUID id,
+    String title,
+    Instant examDate,
+    BigDecimal coefficient,
+    CourseOfferingResponse courseOffering) {}

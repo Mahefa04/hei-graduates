@@ -9,5 +9,5 @@ import school.hei.graduates.entity.Course;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, UUID> {
 
-    Optional<Course> findByRef(String ref);
+  Optional<Course> findByRef(String ref);
 }

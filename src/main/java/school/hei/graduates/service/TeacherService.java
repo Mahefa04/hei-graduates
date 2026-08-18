@@ -15,29 +15,27 @@ import school.hei.graduates.repository.TeacherRepository;
 @AllArgsConstructor
 public class TeacherService {
 
-    private final TeacherRepository teacherRepository;
-    private final TeacherMapper teacherMapper;
+  private final TeacherRepository teacherRepository;
+  private final TeacherMapper teacherMapper;
 
-    public List<TeacherResponse> getAll() {
-        return teacherRepository.findAll().stream()
-                .map(teacherMapper::toResponse)
-                .toList();
-    }
+  public List<TeacherResponse> getAll() {
+    return teacherRepository.findAll().stream().map(teacherMapper::toResponse).toList();
+  }
 
-    public TeacherResponse getById(UUID id) {
-        Teacher teacher =
-                teacherRepository
-                        .findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
+  public TeacherResponse getById(UUID id) {
+    Teacher teacher =
+        teacherRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
 
-        return teacherMapper.toResponse(teacher);
-    }
+    return teacherMapper.toResponse(teacher);
+  }
 
-    public TeacherResponse upsert(UpsertTeacher request) {
-        Teacher teacher = teacherMapper.toEntity(request);
+  public TeacherResponse upsert(UpsertTeacher request) {
+    Teacher teacher = teacherMapper.toEntity(request);
 
-        Teacher savedTeacher = teacherRepository.save(teacher);
+    Teacher savedTeacher = teacherRepository.save(teacher);
 
-        return teacherMapper.toResponse(savedTeacher);
-    }
+    return teacherMapper.toResponse(savedTeacher);
+  }
 }

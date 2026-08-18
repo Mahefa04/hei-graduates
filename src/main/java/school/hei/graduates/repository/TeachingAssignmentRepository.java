@@ -7,15 +7,11 @@ import org.springframework.stereotype.Repository;
 import school.hei.graduates.entity.TeachingAssignment;
 
 @Repository
-public interface TeachingAssignmentRepository
-        extends JpaRepository<TeachingAssignment, UUID> {
+public interface TeachingAssignmentRepository extends JpaRepository<TeachingAssignment, UUID> {
 
-    List<TeachingAssignment> findByTeacher_Id(UUID teacherId);
+  List<TeachingAssignment> findByTeacher_Id(UUID teacherId);
 
-    List<TeachingAssignment> findByCourseOffering_Id(
-            UUID courseOfferingId);
+  List<TeachingAssignment> findByCourseOffering_Id(UUID courseOfferingId);
 
-    boolean existsByTeacher_IdAndCourseOffering_Id(
-            UUID teacherId,
-            UUID courseOfferingId);
+  boolean existsByTeacher_IdAndCourseOffering_Id(UUID teacherId, UUID courseOfferingId);
 }

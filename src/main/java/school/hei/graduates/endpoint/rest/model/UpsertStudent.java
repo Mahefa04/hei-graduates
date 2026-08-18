@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record UpsertStudent(
-        UUID id,
-        @NotBlank String ref,
-        @NotBlank String firstName,
-        @NotBlank String lastName,
-        @NotBlank @Email String email,
-        @NotNull UUID promotionId) {}
+    UUID id,
+    @NotBlank String ref,
+    @NotBlank String firstName,
+    @NotBlank String lastName,
+    @NotBlank @Email String email,
+    @NotNull UUID promotionId) {}

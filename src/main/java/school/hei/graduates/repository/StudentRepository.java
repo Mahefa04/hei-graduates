@@ -10,9 +10,9 @@ import school.hei.graduates.entity.Student;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, UUID> {
 
-    Optional<Student> findByRef(String ref);
+  Optional<Student> findByRef(String ref);
 
-    Optional<Student> findByEmail(String email);
+  Optional<Student> findByEmail(String email);
 
-    List<Student> findByPromotion_Id(UUID promotionId);
+  List<Student> findByPromotion_Id(UUID promotionId);
 }

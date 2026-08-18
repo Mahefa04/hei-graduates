@@ -22,21 +22,19 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GradeHistory {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "grade_id")
-    private Grade grade;
+  @ManyToOne
+  @JoinColumn(name = "grade_id")
+  private Grade grade;
 
-    private BigDecimal oldValue;
+  private BigDecimal oldValue;
 
-    private BigDecimal newValue;
+  private BigDecimal newValue;
 
-    private String reason;
+  private String reason;
 
-    private String modifiedBy;
+  private String modifiedBy;
 
-    private Instant modifiedAt;
+  private Instant modifiedAt;
 }

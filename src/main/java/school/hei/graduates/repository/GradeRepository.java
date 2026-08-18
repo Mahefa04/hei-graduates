@@ -8,11 +8,11 @@ import school.hei.graduates.entity.Grade;
 
 public interface GradeRepository extends JpaRepository<Grade, UUID> {
 
-    List<Grade> findByStudent_Id(UUID studentId);
+  List<Grade> findByStudent_Id(UUID studentId);
 
-    List<Grade> findByExam_Id(UUID examId);
+  List<Grade> findByExam_Id(UUID examId);
 
-    List<Grade> findByStudent_IdAndExam_CourseOffering_Id(UUID studentId, UUID courseOfferingId);
+  List<Grade> findByStudent_IdAndExam_CourseOffering_Id(UUID studentId, UUID courseOfferingId);
 
-    Optional<Grade> findByStudent_IdAndExam_Id(UUID studentId, UUID examId);
+  Optional<Grade> findByStudent_IdAndExam_Id(UUID studentId, UUID examId);
 }

@@ -9,5 +9,5 @@ import school.hei.graduates.entity.Group;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, UUID> {
 
-    Optional<Group> findByRef(String ref);
+  Optional<Group> findByRef(String ref);
 }

@@ -18,11 +18,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Promotion {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    private String ref;
+  private String ref;
 
-    private int startYear;
+  private int startYear;
 }

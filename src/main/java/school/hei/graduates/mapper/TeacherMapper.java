@@ -8,22 +8,22 @@ import school.hei.graduates.entity.Teacher;
 @Component
 public class TeacherMapper {
 
-    public Teacher toEntity(UpsertTeacher request) {
-        return Teacher.builder()
-                .id(request.id())
-                .ref(request.ref())
-                .firstName(request.firstName())
-                .lastName(request.lastName())
-                .email(request.email())
-                .build();
-    }
+  public Teacher toEntity(UpsertTeacher request) {
+    return Teacher.builder()
+        .id(request.id())
+        .ref(request.ref())
+        .firstName(request.firstName())
+        .lastName(request.lastName())
+        .email(request.email())
+        .build();
+  }
 
-    public TeacherResponse toResponse(Teacher teacher) {
-        return new TeacherResponse(
-                teacher.getId(),
-                teacher.getRef(),
-                teacher.getFirstName(),
-                teacher.getLastName(),
-                teacher.getEmail());
-    }
+  public TeacherResponse toResponse(Teacher teacher) {
+    return new TeacherResponse(
+        teacher.getId(),
+        teacher.getRef(),
+        teacher.getFirstName(),
+        teacher.getLastName(),
+        teacher.getEmail());
+  }
 }

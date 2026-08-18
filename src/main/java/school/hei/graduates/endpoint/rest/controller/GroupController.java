@@ -19,21 +19,20 @@ import school.hei.graduates.service.GroupService;
 @AllArgsConstructor
 public class GroupController {
 
-    private final GroupService groupService;
+  private final GroupService groupService;
 
-    @GetMapping
-    public List<GroupResponse> getAll() {
-        return groupService.getAll();
-    }
+  @GetMapping
+  public List<GroupResponse> getAll() {
+    return groupService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public GroupResponse getById(@PathVariable UUID id) {
-        return groupService.getById(id);
-    }
+  @GetMapping("/{id}")
+  public GroupResponse getById(@PathVariable UUID id) {
+    return groupService.getById(id);
+  }
 
-    @PutMapping
-    public GroupResponse upsert(
-            @Valid @RequestBody UpsertGroup request) {
-        return groupService.upsert(request);
-    }
+  @PutMapping
+  public GroupResponse upsert(@Valid @RequestBody UpsertGroup request) {
+    return groupService.upsert(request);
+  }
 }

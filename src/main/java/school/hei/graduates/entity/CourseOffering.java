@@ -22,20 +22,18 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CourseOffering {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+  @ManyToOne
+  @JoinColumn(name = "course_id", nullable = false)
+  private Course course;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    private Group group;
+  @ManyToOne
+  @JoinColumn(name = "group_id", nullable = false)
+  private Group group;
 
-    @Enumerated(EnumType.STRING)
-    private Semester semester;
+  @Enumerated(EnumType.STRING)
+  private Semester semester;
 
-    private String academicYear;
+  private String academicYear;
 }

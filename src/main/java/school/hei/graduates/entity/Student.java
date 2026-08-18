@@ -20,19 +20,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Student {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    private String ref;
+  private String ref;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    private String email;
+  private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "promotion_id")
-    private Promotion promotion;
+  @ManyToOne
+  @JoinColumn(name = "promotion_id")
+  private Promotion promotion;
 }

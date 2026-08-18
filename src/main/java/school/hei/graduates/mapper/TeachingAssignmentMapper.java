@@ -12,29 +12,24 @@ import school.hei.graduates.entity.TeachingAssignment;
 @AllArgsConstructor
 public class TeachingAssignmentMapper {
 
-    private final CourseOfferingMapper courseOfferingMapper;
-    private final TeacherMapper teacherMapper;
+  private final CourseOfferingMapper courseOfferingMapper;
+  private final TeacherMapper teacherMapper;
 
-    public TeachingAssignment toEntity(
-            UpsertTeachingAssignment request,
-            CourseOffering courseOffering,
-            Teacher teacher) {
+  public TeachingAssignment toEntity(
+      UpsertTeachingAssignment request, CourseOffering courseOffering, Teacher teacher) {
 
-        return TeachingAssignment.builder()
-                .id(request.id())
-                .courseOffering(courseOffering)
-                .teacher(teacher)
-                .build();
-    }
+    return TeachingAssignment.builder()
+        .id(request.id())
+        .courseOffering(courseOffering)
+        .teacher(teacher)
+        .build();
+  }
 
-    public TeachingAssignmentResponse toResponse(
-            TeachingAssignment assignment) {
+  public TeachingAssignmentResponse toResponse(TeachingAssignment assignment) {
 
-        return new TeachingAssignmentResponse(
-                assignment.getId(),
-                courseOfferingMapper.toResponse(
-                        assignment.getCourseOffering()),
-                teacherMapper.toResponse(
-                        assignment.getTeacher()));
-    }
+    return new TeachingAssignmentResponse(
+        assignment.getId(),
+        courseOfferingMapper.toResponse(assignment.getCourseOffering()),
+        teacherMapper.toResponse(assignment.getTeacher()));
+  }
 }

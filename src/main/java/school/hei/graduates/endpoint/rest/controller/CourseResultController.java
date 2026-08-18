@@ -14,15 +14,12 @@ import school.hei.graduates.service.CourseResultService;
 @AllArgsConstructor
 public class CourseResultController {
 
-    private final CourseResultService courseResultService;
+  private final CourseResultService courseResultService;
 
-    @GetMapping("/student/{studentId}/course-offering/{courseOfferingId}")
-    public CourseResultResponse getResult(
-            @PathVariable UUID studentId,
-            @PathVariable UUID courseOfferingId) {
+  @GetMapping("/student/{studentId}/course-offering/{courseOfferingId}")
+  public CourseResultResponse getResult(
+      @PathVariable UUID studentId, @PathVariable UUID courseOfferingId) {
 
-        return courseResultService.getResult(
-                studentId,
-                courseOfferingId);
-    }
+    return courseResultService.getResult(studentId, courseOfferingId);
+  }
 }

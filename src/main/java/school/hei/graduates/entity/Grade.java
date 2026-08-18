@@ -21,17 +21,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Grade {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+  @ManyToOne
+  @JoinColumn(name = "student_id")
+  private Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "exam_id")
-    private Exam exam;
+  @ManyToOne
+  @JoinColumn(name = "exam_id")
+  private Exam exam;
 
-    private BigDecimal value;
+  private BigDecimal value;
 }

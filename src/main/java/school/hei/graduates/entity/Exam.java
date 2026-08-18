@@ -22,17 +22,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Exam {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    private String title;
+  private String title;
 
-    private Instant examDate;
+  private Instant examDate;
 
-    private BigDecimal coefficient;
+  private BigDecimal coefficient;
 
-    @ManyToOne
-    @JoinColumn(name = "course_offering_id", nullable = false)
-    private CourseOffering courseOffering;
+  @ManyToOne
+  @JoinColumn(name = "course_offering_id", nullable = false)
+  private CourseOffering courseOffering;
 }

@@ -19,53 +19,42 @@ import school.hei.graduates.repository.GroupRepository;
 @AllArgsConstructor
 public class CourseOfferingService {
 
-    private final CourseOfferingRepository courseOfferingRepository;
-    private final CourseRepository courseRepository;
-    private final GroupRepository groupRepository;
-    private final CourseOfferingMapper courseOfferingMapper;
+  private final CourseOfferingRepository courseOfferingRepository;
+  private final CourseRepository courseRepository;
+  private final GroupRepository groupRepository;
+  private final CourseOfferingMapper courseOfferingMapper;
 
-    public List<CourseOfferingResponse> getAll() {
-        return courseOfferingRepository.findAll().stream()
-                .map(courseOfferingMapper::toResponse)
-                .toList();
-    }
+  public List<CourseOfferingResponse> getAll() {
+    return courseOfferingRepository.findAll().stream()
+        .map(courseOfferingMapper::toResponse)
+        .toList();
+  }
 
-    public CourseOfferingResponse getById(UUID id) {
-        CourseOffering courseOffering =
-                courseOfferingRepository
-                        .findById(id)
-                        .orElseThrow(
-                                () ->
-                                        new ResourceNotFoundException(
-                                                "Course offering not found"));
+  public CourseOfferingResponse getById(UUID id) {
+    CourseOffering courseOffering =
+        courseOfferingRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Course offering not found"));
 
-        return courseOfferingMapper.toResponse(courseOffering);
-    }
+    return courseOfferingMapper.toResponse(courseOffering);
+  }
 
-    public CourseOfferingResponse upsert(
-            UpsertCourseOffering request) {
+  public CourseOfferingResponse upsert(UpsertCourseOffering request) {
 
-        Course course =
-                courseRepository
-                        .findById(request.courseId())
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException("Course not found"));
+    Course course =
+        courseRepository
+            .findById(request.courseId())
+            .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
 
-        Group group =
-                groupRepository
-                        .findById(request.groupId())
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException("Group not found"));
+    Group group =
+        groupRepository
+            .findById(request.groupId())
+            .orElseThrow(() -> new ResourceNotFoundException("Group not found"));
 
-        CourseOffering courseOffering =
-                courseOfferingMapper.toEntity(
-                        request,
-                        course,
-                        group);
+    CourseOffering courseOffering = courseOfferingMapper.toEntity(request, course, group);
 
-        CourseOffering savedCourseOffering =
-                courseOfferingRepository.save(courseOffering);
+    CourseOffering savedCourseOffering = courseOfferingRepository.save(courseOffering);
 
-        return courseOfferingMapper.toResponse(savedCourseOffering);
-    }
+    return courseOfferingMapper.toResponse(savedCourseOffering);
+  }
 }

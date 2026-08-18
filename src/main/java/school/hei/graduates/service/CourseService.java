@@ -15,29 +15,27 @@ import school.hei.graduates.repository.CourseRepository;
 @AllArgsConstructor
 public class CourseService {
 
-    private final CourseRepository courseRepository;
-    private final CourseMapper courseMapper;
+  private final CourseRepository courseRepository;
+  private final CourseMapper courseMapper;
 
-    public List<CourseResponse> getAll() {
-        return courseRepository.findAll().stream()
-                .map(courseMapper::toResponse)
-                .toList();
-    }
+  public List<CourseResponse> getAll() {
+    return courseRepository.findAll().stream().map(courseMapper::toResponse).toList();
+  }
 
-    public CourseResponse getById(UUID id) {
-        Course course =
-                courseRepository
-                        .findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+  public CourseResponse getById(UUID id) {
+    Course course =
+        courseRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
 
-        return courseMapper.toResponse(course);
-    }
+    return courseMapper.toResponse(course);
+  }
 
-    public CourseResponse upsert(UpsertCourse request) {
-        Course course = courseMapper.toEntity(request);
+  public CourseResponse upsert(UpsertCourse request) {
+    Course course = courseMapper.toEntity(request);
 
-        Course savedCourse = courseRepository.save(course);
+    Course savedCourse = courseRepository.save(course);
 
-        return courseMapper.toResponse(savedCourse);
-    }
+    return courseMapper.toResponse(savedCourse);
+  }
 }

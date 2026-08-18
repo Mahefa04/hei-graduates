@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import school.hei.graduates.endpoint.rest.model.CourseResponse;
 import school.hei.graduates.endpoint.rest.model.UpsertCourse;
-import school.hei.graduates.entity.Course;
 import school.hei.graduates.service.CourseService;
 
 @RestController
@@ -20,20 +19,20 @@ import school.hei.graduates.service.CourseService;
 @AllArgsConstructor
 public class CourseController {
 
-    private final CourseService courseService;
+  private final CourseService courseService;
 
-    @GetMapping
-    public List<CourseResponse> getAll() {
-        return courseService.getAll();
-    }
+  @GetMapping
+  public List<CourseResponse> getAll() {
+    return courseService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public CourseResponse getById(@PathVariable UUID id) {
-        return courseService.getById(id);
-    }
+  @GetMapping("/{id}")
+  public CourseResponse getById(@PathVariable UUID id) {
+    return courseService.getById(id);
+  }
 
-    @PutMapping
-    public CourseResponse upsert(@Valid @RequestBody UpsertCourse request) {
-        return courseService.upsert(request);
-    }
+  @PutMapping
+  public CourseResponse upsert(@Valid @RequestBody UpsertCourse request) {
+    return courseService.upsert(request);
+  }
 }

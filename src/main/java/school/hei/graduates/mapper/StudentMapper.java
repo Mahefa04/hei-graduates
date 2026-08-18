@@ -11,29 +11,27 @@ import school.hei.graduates.entity.Student;
 @AllArgsConstructor
 public class StudentMapper {
 
-    private final PromotionMapper promotionMapper;
+  private final PromotionMapper promotionMapper;
 
-    public Student toEntity(
-            UpsertStudent request,
-            Promotion promotion) {
+  public Student toEntity(UpsertStudent request, Promotion promotion) {
 
-        return Student.builder()
-                .id(request.id())
-                .ref(request.ref())
-                .firstName(request.firstName())
-                .lastName(request.lastName())
-                .email(request.email())
-                .promotion(promotion)
-                .build();
-    }
+    return Student.builder()
+        .id(request.id())
+        .ref(request.ref())
+        .firstName(request.firstName())
+        .lastName(request.lastName())
+        .email(request.email())
+        .promotion(promotion)
+        .build();
+  }
 
-    public StudentResponse toResponse(Student student) {
-        return new StudentResponse(
-                student.getId(),
-                student.getRef(),
-                student.getFirstName(),
-                student.getLastName(),
-                student.getEmail(),
-                promotionMapper.toResponse(student.getPromotion()));
-    }
+  public StudentResponse toResponse(Student student) {
+    return new StudentResponse(
+        student.getId(),
+        student.getRef(),
+        student.getFirstName(),
+        student.getLastName(),
+        student.getEmail(),
+        promotionMapper.toResponse(student.getPromotion()));
+  }
 }

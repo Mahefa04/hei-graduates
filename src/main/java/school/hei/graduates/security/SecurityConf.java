@@ -12,27 +12,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @AllArgsConstructor
 public class SecurityConf {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(
-                        auth ->
-                                auth
-                                        .requestMatchers(
-                                                "/ping",
-                                                "/swagger-ui/**",
-                                                "/v3/api-docs/**")
-                                        .permitAll()
-
-                                        .requestMatchers("/users/**")
-                                        .hasRole("ADMIN")
-
-                                        .anyRequest()
-                                        .authenticated())
-                .httpBasic(basic -> {})
-                .build();
-    }
+    return http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/ping", "/swagger-ui/**", "/v3/api-docs/**")
+                    .permitAll()
+                    .requestMatchers("/users/**")
+                    .hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated())
+        .httpBasic(basic -> {})
+        .build();
+  }
 }

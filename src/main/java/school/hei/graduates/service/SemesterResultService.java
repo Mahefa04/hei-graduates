@@ -19,83 +19,57 @@ import school.hei.graduates.repository.StudentRepository;
 @AllArgsConstructor
 public class SemesterResultService {
 
-    private final StudentRepository studentRepository;
-    private final CourseOfferingRepository courseOfferingRepository;
-    private final CourseResultService courseResultService;
+  private final StudentRepository studentRepository;
+  private final CourseOfferingRepository courseOfferingRepository;
+  private final CourseResultService courseResultService;
 
-    public SemesterResultResponse getResult(
-            UUID studentId,
-            String academicYear,
-            Semester semester) {
+  public SemesterResultResponse getResult(UUID studentId, String academicYear, Semester semester) {
 
-        if (!studentRepository.existsById(studentId)) {
-            throw new ResourceNotFoundException(
-                    "Student not found");
-        }
-
-        List<CourseOffering> courseOfferings =
-                courseOfferingRepository
-                        .findByAcademicYearAndSemester(
-                                academicYear,
-                                semester);
-
-        List<CourseResultResponse> results =
-                new ArrayList<>();
-
-        for (CourseOffering courseOffering : courseOfferings) {
-
-            try {
-                CourseResultResponse result =
-                        courseResultService.getResult(
-                                studentId,
-                                courseOffering.getId());
-
-                results.add(result);
-
-            } catch (Exception ignored) {}
-        }
-
-        BigDecimal weightedTotal = BigDecimal.ZERO;
-        int totalCredits = 0;
-        boolean complete = true;
-
-        for (CourseResultResponse result : results) {
-
-            int credits =
-                    result.courseOffering()
-                            .course()
-                            .credits();
-
-            weightedTotal =
-                    weightedTotal.add(
-                            result.average()
-                                    .multiply(
-                                            BigDecimal.valueOf(
-                                                    credits)));
-
-            totalCredits += credits;
-
-            if (!result.complete()) {
-                complete = false;
-            }
-        }
-
-        BigDecimal average = BigDecimal.ZERO;
-
-        if (totalCredits > 0) {
-            average =
-                    weightedTotal.divide(
-                            BigDecimal.valueOf(totalCredits),
-                            2,
-                            RoundingMode.HALF_UP);
-        }
-
-        return new SemesterResultResponse(
-                academicYear,
-                semester.name(),
-                average,
-                totalCredits,
-                complete,
-                results);
+    if (!studentRepository.existsById(studentId)) {
+      throw new ResourceNotFoundException("Student not found");
     }
+
+    List<CourseOffering> courseOfferings =
+        courseOfferingRepository.findByAcademicYearAndSemester(academicYear, semester);
+
+    List<CourseResultResponse> results = new ArrayList<>();
+
+    for (CourseOffering courseOffering : courseOfferings) {
+
+      try {
+        CourseResultResponse result =
+            courseResultService.getResult(studentId, courseOffering.getId());
+
+        results.add(result);
+
+      } catch (Exception ignored) {
+      }
+    }
+
+    BigDecimal weightedTotal = BigDecimal.ZERO;
+    int totalCredits = 0;
+    boolean complete = true;
+
+    for (CourseResultResponse result : results) {
+
+      int credits = result.courseOffering().course().credits();
+
+      weightedTotal = weightedTotal.add(result.average().multiply(BigDecimal.valueOf(credits)));
+
+      totalCredits += credits;
+
+      if (!result.complete()) {
+        complete = false;
+      }
+    }
+
+    BigDecimal average = BigDecimal.ZERO;
+
+    if (totalCredits > 0) {
+      average = weightedTotal.divide(BigDecimal.valueOf(totalCredits), 2, RoundingMode.HALF_UP);
+    }
+
+    return new SemesterResultResponse(
+        academicYear, semester.name(), average, totalCredits, complete, results);
+  }
 }

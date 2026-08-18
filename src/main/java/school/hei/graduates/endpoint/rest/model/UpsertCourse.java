@@ -5,7 +5,4 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.UUID;
 
 public record UpsertCourse(
-        UUID id,
-        @NotBlank String ref,
-        @NotBlank String title,
-        @Min(1) int credits) {}
+    UUID id, @NotBlank String ref, @NotBlank String title, @Min(1) int credits) {}

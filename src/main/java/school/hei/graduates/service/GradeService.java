@@ -25,155 +25,128 @@ import school.hei.graduates.repository.*;
 @AllArgsConstructor
 public class GradeService {
 
-    private final TeacherRepository.GradeRepository gradeRepository;
-    private final GradeHistoryRepository gradeHistoryRepository;
-    private final StudentRepository studentRepository;
-    private final ExamRepository examRepository;
-    private final CourseOfferingRepository courseOfferingRepository;
+  private final TeacherRepository.GradeRepository gradeRepository;
+  private final GradeHistoryRepository gradeHistoryRepository;
+  private final StudentRepository studentRepository;
+  private final ExamRepository examRepository;
+  private final CourseOfferingRepository courseOfferingRepository;
 
-    private final GradeMapper gradeMapper;
-    private final GradeHistoryMapper gradeHistoryMapper;
-    private final AuthorizationService authorizationService;
+  private final GradeMapper gradeMapper;
+  private final GradeHistoryMapper gradeHistoryMapper;
+  private final AuthorizationService authorizationService;
 
-    public GradeResponse getById(
-            UUID id,
-            String email) {
+  public GradeResponse getById(UUID id, String email) {
 
-        Grade grade =
-                gradeRepository
-                        .findById(id)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException("Grade not found"));
+    Grade grade =
+        gradeRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Grade not found"));
 
-        authorizationService.checkCanViewGrade(
-                email,
-                grade);
+    authorizationService.checkCanViewGrade(email, grade);
 
-        return gradeMapper.toResponse(grade);
+    return gradeMapper.toResponse(grade);
+  }
+
+  public List<GradeResponse> getByStudentId(UUID studentId, String email) {
+
+    if (!studentRepository.existsById(studentId)) {
+      throw new ResourceNotFoundException("Student not found");
     }
 
-    public List<GradeResponse> getByStudentId(
-            UUID studentId,
-            String email) {
+    authorizationService.checkCanViewStudentGrades(email, studentId);
 
-        if (!studentRepository.existsById(studentId)) {
-            throw new ResourceNotFoundException("Student not found");
-        }
+    return gradeRepository.findByStudent_Id(studentId).stream()
+        .map(gradeMapper::toResponse)
+        .toList();
+  }
 
-        authorizationService.checkCanViewStudentGrades(
-                email,
-                studentId);
+  public GradeResponse create(CreateGrade request, String email) {
+    Student student =
+        studentRepository
+            .findById(request.studentId())
+            .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
 
-        return gradeRepository
-                .findByStudent_Id(studentId)
-                .stream()
-                .map(gradeMapper::toResponse)
-                .toList();
+    Exam exam =
+        examRepository
+            .findById(request.examId())
+            .orElseThrow(() -> new ResourceNotFoundException("Exam not found"));
+
+    authorizationService.checkCanManageGrade(email, exam);
+
+    if (gradeRepository
+        .findByStudent_IdAndExam_Id(request.studentId(), request.examId())
+        .isPresent()) {
+
+      throw new ConflictException("Student already has a grade for this exam");
     }
 
-    public GradeResponse create(CreateGrade request, String email) {
-        Student student =
-                studentRepository
-                        .findById(request.studentId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+    Grade grade = gradeMapper.toEntity(request, student, exam);
 
-        Exam exam =
-                examRepository
-                        .findById(request.examId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Exam not found"));
+    Grade savedGrade = gradeRepository.save(grade);
 
-        authorizationService.checkCanManageGrade(email, exam);
+    return gradeMapper.toResponse(savedGrade);
+  }
 
-        if (gradeRepository
-                .findByStudent_IdAndExam_Id(request.studentId(), request.examId())
-                .isPresent()) {
+  @Transactional
+  public GradeResponse update(UUID gradeId, UpdateGrade request, String modifiedBy) {
 
-            throw new ConflictException(
-                    "Student already has a grade for this exam");
-        }
-
-        Grade grade = gradeMapper.toEntity(request, student, exam);
-
-        Grade savedGrade = gradeRepository.save(grade);
-
-        return gradeMapper.toResponse(savedGrade);
+    if (request.reason() == null || request.reason().isBlank()) {
+      throw new BadRequestException("A reason is required to update a grade");
     }
 
-    @Transactional
-    public GradeResponse update(
-            UUID gradeId,
-            UpdateGrade request,
-            String modifiedBy) {
+    Grade grade =
+        gradeRepository
+            .findById(gradeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Grade not found"));
 
-        if (request.reason() == null || request.reason().isBlank()) {
-            throw new BadRequestException(
-                    "A reason is required to update a grade");
-        }
+    authorizationService.checkCanManageGrade(modifiedBy, grade.getExam());
 
-        Grade grade =
-                gradeRepository
-                        .findById(gradeId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Grade not found"));
-
-        authorizationService.checkCanManageGrade(modifiedBy, grade.getExam());
-
-        if (grade.getValue().compareTo(request.value()) == 0) {
-            throw new BadRequestException(
-                    "The new grade is identical to the current grade");
-        }
-
-        GradeHistory history =
-                GradeHistory.builder()
-                        .grade(grade)
-                        .oldValue(grade.getValue())
-                        .newValue(request.value())
-                        .reason(request.reason())
-                        .modifiedBy(modifiedBy)
-                        .modifiedAt(Instant.now())
-                        .build();
-
-        gradeHistoryRepository.save(history);
-
-        grade.setValue(request.value());
-
-        Grade savedGrade = gradeRepository.save(grade);
-
-        return gradeMapper.toResponse(savedGrade);
+    if (grade.getValue().compareTo(request.value()) == 0) {
+      throw new BadRequestException("The new grade is identical to the current grade");
     }
 
-    public List<GradeHistoryResponse> getHistory(UUID gradeId, String email) {
-        Grade grade =
-                gradeRepository
-                        .findById(gradeId)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException("Grade not found"));
+    GradeHistory history =
+        GradeHistory.builder()
+            .grade(grade)
+            .oldValue(grade.getValue())
+            .newValue(request.value())
+            .reason(request.reason())
+            .modifiedBy(modifiedBy)
+            .modifiedAt(Instant.now())
+            .build();
 
-        authorizationService.checkCanViewGrade(email, grade);
+    gradeHistoryRepository.save(history);
 
-        return gradeHistoryRepository
-                .findByGrade_IdOrderByModifiedAtAsc(gradeId)
-                .stream()
-                .map(gradeHistoryMapper::toResponse)
-                .toList();
+    grade.setValue(request.value());
+
+    Grade savedGrade = gradeRepository.save(grade);
+
+    return gradeMapper.toResponse(savedGrade);
+  }
+
+  public List<GradeHistoryResponse> getHistory(UUID gradeId, String email) {
+    Grade grade =
+        gradeRepository
+            .findById(gradeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Grade not found"));
+
+    authorizationService.checkCanViewGrade(email, grade);
+
+    return gradeHistoryRepository.findByGrade_IdOrderByModifiedAtAsc(gradeId).stream()
+        .map(gradeHistoryMapper::toResponse)
+        .toList();
+  }
+
+  public List<GradeResponse> getByCourseOfferingId(UUID courseOfferingId, String email) {
+
+    if (!courseOfferingRepository.existsById(courseOfferingId)) {
+      throw new ResourceNotFoundException("Course offering not found");
     }
 
-    public List<GradeResponse> getByCourseOfferingId(
-            UUID courseOfferingId,
-            String email) {
+    authorizationService.checkCanViewCourseOfferingGrades(email, courseOfferingId);
 
-        if (!courseOfferingRepository.existsById(courseOfferingId)) {
-            throw new ResourceNotFoundException(
-                    "Course offering not found");
-        }
-
-        authorizationService.checkCanViewCourseOfferingGrades(
-                email,
-                courseOfferingId);
-
-        return gradeRepository
-                .findByExam_CourseOffering_Id(courseOfferingId)
-                .stream()
-                .map(gradeMapper::toResponse)
-                .toList();
-    }
+    return gradeRepository.findByExam_CourseOffering_Id(courseOfferingId).stream()
+        .map(gradeMapper::toResponse)
+        .toList();
+  }
 }

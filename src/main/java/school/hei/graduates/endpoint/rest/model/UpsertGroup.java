@@ -5,7 +5,4 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import school.hei.graduates.entity.Track;
 
-public record UpsertGroup(
-        UUID id,
-        @NotBlank String ref,
-        @NotNull Track track) {}
+public record UpsertGroup(UUID id, @NotBlank String ref, @NotNull Track track) {}

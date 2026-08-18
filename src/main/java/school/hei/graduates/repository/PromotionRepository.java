@@ -9,7 +9,7 @@ import school.hei.graduates.entity.Promotion;
 @Repository
 public interface PromotionRepository extends JpaRepository<Promotion, UUID> {
 
-    Optional<Promotion> findByRef(String ref);
+  Optional<Promotion> findByRef(String ref);
 
-    Optional<Promotion> findByStartYear(int startYear);
+  Optional<Promotion> findByStartYear(int startYear);
 }

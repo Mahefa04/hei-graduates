@@ -20,93 +20,77 @@ import school.hei.graduates.repository.StudentRepository;
 @AllArgsConstructor
 public class StudentGroupHistoryService {
 
-    private final StudentGroupHistoryRepository historyRepository;
-    private final StudentRepository studentRepository;
-    private final GroupRepository groupRepository;
-    private final StudentGroupHistoryMapper historyMapper;
+  private final StudentGroupHistoryRepository historyRepository;
+  private final StudentRepository studentRepository;
+  private final GroupRepository groupRepository;
+  private final StudentGroupHistoryMapper historyMapper;
 
-    public List<StudentGroupHistoryResponse> getByStudentId(
-            UUID studentId) {
+  public List<StudentGroupHistoryResponse> getByStudentId(UUID studentId) {
 
-        if (!studentRepository.existsById(studentId)) {
-            throw new ResourceNotFoundException("Student not found");
-        }
-
-        return historyRepository
-                .findByStudent_IdOrderByStartDateAsc(studentId)
-                .stream()
-                .map(historyMapper::toResponse)
-                .toList();
+    if (!studentRepository.existsById(studentId)) {
+      throw new ResourceNotFoundException("Student not found");
     }
 
-    public StudentGroupHistoryResponse changeGroup(
-            UUID studentId,
-            UUID groupId,
-            LocalDate changeDate) {
+    return historyRepository.findByStudent_IdOrderByStartDateAsc(studentId).stream()
+        .map(historyMapper::toResponse)
+        .toList();
+  }
 
-        Student student = studentRepository
-                .findById(studentId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Student not found"));
+  public StudentGroupHistoryResponse changeGroup(
+      UUID studentId, UUID groupId, LocalDate changeDate) {
 
-        Group newGroup = groupRepository
-                .findById(groupId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Group not found"));
+    Student student =
+        studentRepository
+            .findById(studentId)
+            .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
 
-        StudentGroupHistory current =
-                historyRepository
-                        .findFirstByStudent_IdAndEndDateIsNull(studentId)
-                        .orElse(null);
+    Group newGroup =
+        groupRepository
+            .findById(groupId)
+            .orElseThrow(() -> new ResourceNotFoundException("Group not found"));
 
-        if (current != null) {
+    StudentGroupHistory current =
+        historyRepository.findFirstByStudent_IdAndEndDateIsNull(studentId).orElse(null);
 
-            if (current.getGroup().getId().equals(groupId)) {
-                throw new BadRequestException(
-                        "Student is already in this group");
-            }
+    if (current != null) {
 
-            if (!changeDate.isAfter(current.getStartDate())) {
-                throw new BadRequestException(
-                        "Change date must be after current group start date");
-            }
+      if (current.getGroup().getId().equals(groupId)) {
+        throw new BadRequestException("Student is already in this group");
+      }
 
-            current.setEndDate(changeDate.minusDays(1));
+      if (!changeDate.isAfter(current.getStartDate())) {
+        throw new BadRequestException("Change date must be after current group start date");
+      }
 
-            historyRepository.save(current);
-        }
+      current.setEndDate(changeDate.minusDays(1));
 
-        StudentGroupHistory newHistory =
-                StudentGroupHistory.builder()
-                        .student(student)
-                        .group(newGroup)
-                        .startDate(changeDate)
-                        .endDate(null)
-                        .build();
-
-        StudentGroupHistory saved =
-                historyRepository.save(newHistory);
-
-        return historyMapper.toResponse(saved);
+      historyRepository.save(current);
     }
 
-    public StudentGroupHistoryResponse getCurrentGroup(
-            UUID studentId) {
+    StudentGroupHistory newHistory =
+        StudentGroupHistory.builder()
+            .student(student)
+            .group(newGroup)
+            .startDate(changeDate)
+            .endDate(null)
+            .build();
 
-        if (!studentRepository.existsById(studentId)) {
-            throw new ResourceNotFoundException(
-                    "Student not found");
-        }
+    StudentGroupHistory saved = historyRepository.save(newHistory);
 
-        StudentGroupHistory current =
-                historyRepository
-                        .findFirstByStudent_IdAndEndDateIsNull(studentId)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Student has no current group"));
+    return historyMapper.toResponse(saved);
+  }
 
-        return historyMapper.toResponse(current);
+  public StudentGroupHistoryResponse getCurrentGroup(UUID studentId) {
+
+    if (!studentRepository.existsById(studentId)) {
+      throw new ResourceNotFoundException("Student not found");
     }
+
+    StudentGroupHistory current =
+        historyRepository
+            .findFirstByStudent_IdAndEndDateIsNull(studentId)
+            .orElseThrow(() -> new ResourceNotFoundException("Student has no current group"));
+
+    return historyMapper.toResponse(current);
+  }
 }

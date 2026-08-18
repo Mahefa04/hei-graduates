@@ -4,6 +4,4 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record UpsertTeachingAssignment(
-        UUID id,
-        @NotNull UUID courseOfferingId,
-        @NotNull UUID teacherId) {}
+    UUID id, @NotNull UUID courseOfferingId, @NotNull UUID teacherId) {}

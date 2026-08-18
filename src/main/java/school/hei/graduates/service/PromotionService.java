@@ -15,29 +15,27 @@ import school.hei.graduates.repository.PromotionRepository;
 @AllArgsConstructor
 public class PromotionService {
 
-    private final PromotionRepository promotionRepository;
-    private final PromotionMapper promotionMapper;
+  private final PromotionRepository promotionRepository;
+  private final PromotionMapper promotionMapper;
 
-    public List<PromotionResponse> getAll() {
-        return promotionRepository.findAll().stream()
-                .map(promotionMapper::toResponse)
-                .toList();
-    }
+  public List<PromotionResponse> getAll() {
+    return promotionRepository.findAll().stream().map(promotionMapper::toResponse).toList();
+  }
 
-    public PromotionResponse getById(UUID id) {
-        Promotion promotion =
-                promotionRepository
-                        .findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Promotion not found"));
+  public PromotionResponse getById(UUID id) {
+    Promotion promotion =
+        promotionRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Promotion not found"));
 
-        return promotionMapper.toResponse(promotion);
-    }
+    return promotionMapper.toResponse(promotion);
+  }
 
-    public PromotionResponse upsert(UpsertPromotion request) {
-        Promotion promotion = promotionMapper.toEntity(request);
+  public PromotionResponse upsert(UpsertPromotion request) {
+    Promotion promotion = promotionMapper.toEntity(request);
 
-        Promotion savedPromotion = promotionRepository.save(promotion);
+    Promotion savedPromotion = promotionRepository.save(promotion);
 
-        return promotionMapper.toResponse(savedPromotion);
-    }
+    return promotionMapper.toResponse(savedPromotion);
+  }
 }

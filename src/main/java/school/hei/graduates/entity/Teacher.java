@@ -18,15 +18,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Teacher {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    private String ref;
+  private String ref;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    private String email;
+  private String email;
 }

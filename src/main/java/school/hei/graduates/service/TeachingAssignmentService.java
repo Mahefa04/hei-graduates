@@ -19,82 +19,63 @@ import school.hei.graduates.repository.TeachingAssignmentRepository;
 @AllArgsConstructor
 public class TeachingAssignmentService {
 
-    private final TeachingAssignmentRepository teachingAssignmentRepository;
-    private final CourseOfferingRepository courseOfferingRepository;
-    private final TeacherRepository teacherRepository;
-    private final TeachingAssignmentMapper teachingAssignmentMapper;
+  private final TeachingAssignmentRepository teachingAssignmentRepository;
+  private final CourseOfferingRepository courseOfferingRepository;
+  private final TeacherRepository teacherRepository;
+  private final TeachingAssignmentMapper teachingAssignmentMapper;
 
-    public List<TeachingAssignmentResponse> getAll() {
-        return teachingAssignmentRepository.findAll().stream()
-                .map(teachingAssignmentMapper::toResponse)
-                .toList();
+  public List<TeachingAssignmentResponse> getAll() {
+    return teachingAssignmentRepository.findAll().stream()
+        .map(teachingAssignmentMapper::toResponse)
+        .toList();
+  }
+
+  public TeachingAssignmentResponse getById(UUID id) {
+    TeachingAssignment assignment =
+        teachingAssignmentRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Teaching assignment not found"));
+
+    return teachingAssignmentMapper.toResponse(assignment);
+  }
+
+  public List<TeachingAssignmentResponse> getByTeacherId(UUID teacherId) {
+
+    if (!teacherRepository.existsById(teacherId)) {
+      throw new ResourceNotFoundException("Teacher not found");
     }
 
-    public TeachingAssignmentResponse getById(UUID id) {
-        TeachingAssignment assignment =
-                teachingAssignmentRepository
-                        .findById(id)
-                        .orElseThrow(
-                                () ->
-                                        new ResourceNotFoundException(
-                                                "Teaching assignment not found"));
+    return teachingAssignmentRepository.findByTeacher_Id(teacherId).stream()
+        .map(teachingAssignmentMapper::toResponse)
+        .toList();
+  }
 
-        return teachingAssignmentMapper.toResponse(assignment);
+  public List<TeachingAssignmentResponse> getByCourseOfferingId(UUID courseOfferingId) {
+
+    if (!courseOfferingRepository.existsById(courseOfferingId)) {
+      throw new ResourceNotFoundException("Course offering not found");
     }
 
-    public List<TeachingAssignmentResponse> getByTeacherId(
-            UUID teacherId) {
+    return teachingAssignmentRepository.findByCourseOffering_Id(courseOfferingId).stream()
+        .map(teachingAssignmentMapper::toResponse)
+        .toList();
+  }
 
-        if (!teacherRepository.existsById(teacherId)) {
-            throw new ResourceNotFoundException("Teacher not found");
-        }
+  public TeachingAssignmentResponse upsert(UpsertTeachingAssignment request) {
 
-        return teachingAssignmentRepository
-                .findByTeacher_Id(teacherId)
-                .stream()
-                .map(teachingAssignmentMapper::toResponse)
-                .toList();
-    }
+    CourseOffering courseOffering =
+        courseOfferingRepository
+            .findById(request.courseOfferingId())
+            .orElseThrow(() -> new ResourceNotFoundException("Course offering not found"));
 
-    public List<TeachingAssignmentResponse> getByCourseOfferingId(
-            UUID courseOfferingId) {
+    Teacher teacher =
+        teacherRepository
+            .findById(request.teacherId())
+            .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
 
-        if (!courseOfferingRepository.existsById(courseOfferingId)) {
-            throw new ResourceNotFoundException(
-                    "Course offering not found");
-        }
+    TeachingAssignment assignment =
+        teachingAssignmentMapper.toEntity(request, courseOffering, teacher);
 
-        return teachingAssignmentRepository
-                .findByCourseOffering_Id(courseOfferingId)
-                .stream()
-                .map(teachingAssignmentMapper::toResponse)
-                .toList();
-    }
-
-    public TeachingAssignmentResponse upsert(
-            UpsertTeachingAssignment request) {
-
-        CourseOffering courseOffering =
-                courseOfferingRepository
-                        .findById(request.courseOfferingId())
-                        .orElseThrow(
-                                () ->
-                                        new ResourceNotFoundException(
-                                                "Course offering not found"));
-
-        Teacher teacher =
-                teacherRepository
-                        .findById(request.teacherId())
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException("Teacher not found"));
-
-        TeachingAssignment assignment =
-                teachingAssignmentMapper.toEntity(
-                        request,
-                        courseOffering,
-                        teacher);
-
-        return teachingAssignmentMapper.toResponse(
-                teachingAssignmentRepository.save(assignment));
-    }
+    return teachingAssignmentMapper.toResponse(teachingAssignmentRepository.save(assignment));
+  }
 }

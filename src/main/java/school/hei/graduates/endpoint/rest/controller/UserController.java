@@ -14,21 +14,20 @@ import school.hei.graduates.service.UserService;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @GetMapping
-    public List<UserResponse> getAll() {
-        return userService.getAll();
-    }
+  @GetMapping
+  public List<UserResponse> getAll() {
+    return userService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public UserResponse getById(@PathVariable UUID id) {
-        return userService.getById(id);
-    }
+  @GetMapping("/{id}")
+  public UserResponse getById(@PathVariable UUID id) {
+    return userService.getById(id);
+  }
 
-    @PostMapping
-    public UserResponse create(
-            @Valid @RequestBody CreateUser request) {
-        return userService.create(request);
-    }
+  @PostMapping
+  public UserResponse create(@Valid @RequestBody CreateUser request) {
+    return userService.create(request);
+  }
 }
