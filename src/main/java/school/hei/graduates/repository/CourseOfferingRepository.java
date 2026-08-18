@@ -22,4 +22,6 @@ public interface CourseOfferingRepository
     List<CourseOffering> findByGroup_IdAndSemester(
             UUID groupId,
             Semester semester);
+
+    List<CourseOffering> findByAcademicYearAndSemester(String academicYear, Semester semester);
 }
