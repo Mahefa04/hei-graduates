@@ -6,7 +6,6 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.hei.graduates.endpoint.rest.model.StudentGroupHistoryResponse;
-import school.hei.graduates.endpoint.rest.model.UpsertStudentGroupHistory;
 import school.hei.graduates.entity.Group;
 import school.hei.graduates.entity.Student;
 import school.hei.graduates.entity.StudentGroupHistory;
@@ -64,12 +63,18 @@ public class StudentGroupHistoryService {
 
         if (current != null) {
 
+            if (current.getGroup().getId().equals(groupId)) {
+                throw new BadRequestException(
+                        "Student is already in this group");
+            }
+
             if (!changeDate.isAfter(current.getStartDate())) {
                 throw new BadRequestException(
                         "Change date must be after current group start date");
             }
 
             current.setEndDate(changeDate.minusDays(1));
+
             historyRepository.save(current);
         }
 
