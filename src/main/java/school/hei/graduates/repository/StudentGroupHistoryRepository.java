@@ -15,7 +15,7 @@ public interface StudentGroupHistoryRepository
             UUID studentId
     );
 
-    Optional<StudentGroupHistory> findFirstByStudent_IdAndEndDateIsNullOrderByStartDateDesc(
+    Optional<StudentGroupHistory> findFirstByStudent_IdAndEndDateIsNull(
             UUID studentId
     );
 }

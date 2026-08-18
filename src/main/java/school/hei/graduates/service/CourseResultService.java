@@ -12,10 +12,7 @@ import school.hei.graduates.entity.Exam;
 import school.hei.graduates.entity.Grade;
 import school.hei.graduates.exception.ResourceNotFoundException;
 import school.hei.graduates.mapper.CourseOfferingMapper;
-import school.hei.graduates.repository.CourseOfferingRepository;
-import school.hei.graduates.repository.ExamRepository;
-import school.hei.graduates.repository.GradeRepository;
-import school.hei.graduates.repository.StudentRepository;
+import school.hei.graduates.repository.*;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +21,7 @@ public class CourseResultService {
     private final StudentRepository studentRepository;
     private final CourseOfferingRepository courseOfferingRepository;
     private final ExamRepository examRepository;
-    private final GradeRepository gradeRepository;
+    private final TeacherRepository.GradeRepository gradeRepository;
     private final CourseOfferingMapper courseOfferingMapper;
 
     public CourseResultResponse getResult(

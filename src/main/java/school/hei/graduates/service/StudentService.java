@@ -1,6 +1,7 @@
 package school.hei.graduates.service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -96,11 +97,11 @@ public class StudentService {
                         .findById(groupId)
                         .orElseThrow(() -> new ResourceNotFoundException("Group not found"));
 
-        Instant now = Instant.now();
+        LocalDate now = LocalDate.now();
 
         var currentGroup =
                 studentGroupHistoryRepository
-                        .findFirstByStudent_IdAndEndDateIsNullOrderByStartDateDesc(studentId);
+                        .findFirstByStudent_IdAndEndDateIsNull(studentId);
 
         if (currentGroup.isPresent()) {
             StudentGroupHistory currentHistory = currentGroup.get();
