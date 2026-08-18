@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-public record YearResultResponse(
+public record AcademicYearResultResponse(
         UUID studentId,
         int year,
         BigDecimal average,
