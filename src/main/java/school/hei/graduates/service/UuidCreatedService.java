@@ -1,4 +1,4 @@
-package school.hei.graduates.service.event;
+package school.hei.graduates.service;
 
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;

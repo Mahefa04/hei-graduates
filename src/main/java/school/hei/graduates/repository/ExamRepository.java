@@ -1,0 +1,13 @@
+package school.hei.graduates.repository;
+
+import java.util.List;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import school.hei.graduates.entity.Exam;
+
+@Repository
+public interface ExamRepository extends JpaRepository<Exam, UUID> {
+
+  List<Exam> findByCourseOffering_Id(UUID courseOfferingId);
+}
