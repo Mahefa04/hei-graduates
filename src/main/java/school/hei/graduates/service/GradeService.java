@@ -25,7 +25,7 @@ import school.hei.graduates.repository.*;
 @AllArgsConstructor
 public class GradeService {
 
-  private final TeacherRepository.GradeRepository gradeRepository;
+  private final GradeRepository gradeRepository;
   private final GradeHistoryRepository gradeHistoryRepository;
   private final StudentRepository studentRepository;
   private final ExamRepository examRepository;
