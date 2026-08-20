@@ -14,7 +14,11 @@ import school.hei.graduates.entity.StudentGroupHistory;
 import school.hei.graduates.exception.BadRequestException;
 import school.hei.graduates.exception.ResourceNotFoundException;
 import school.hei.graduates.mapper.CourseOfferingMapper;
-import school.hei.graduates.repository.*;
+import school.hei.graduates.repository.CourseOfferingRepository;
+import school.hei.graduates.repository.ExamRepository;
+import school.hei.graduates.repository.GradeRepository;
+import school.hei.graduates.repository.StudentGroupHistoryRepository;
+import school.hei.graduates.repository.StudentRepository;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +43,6 @@ public class CourseResultService {
             .orElseThrow(() -> new ResourceNotFoundException("Course offering not found"));
 
     if (!studentWasInGroup(studentId, courseOffering.getGroup().getId())) {
-
       throw new BadRequestException("Student was not in this group");
     }
 
@@ -52,11 +55,10 @@ public class CourseResultService {
     BigDecimal completedCoefficient = BigDecimal.ZERO;
 
     for (Grade grade : grades) {
+
       BigDecimal coefficient = grade.getExam().getCoefficient();
 
-      BigDecimal weightedGrade = grade.getValue().multiply(coefficient);
-
-      weightedSum = weightedSum.add(weightedGrade);
+      weightedSum = weightedSum.add(grade.getValue().multiply(coefficient));
 
       completedCoefficient = completedCoefficient.add(coefficient);
     }
@@ -93,13 +95,6 @@ public class CourseResultService {
     List<StudentGroupHistory> histories =
         historyRepository.findByStudent_IdOrderByStartDateAsc(studentId);
 
-    for (StudentGroupHistory history : histories) {
-
-      if (history.getGroup().getId().equals(groupId)) {
-        return true;
-      }
-    }
-
-    return false;
+    return histories.stream().anyMatch(history -> history.getGroup().getId().equals(groupId));
   }
 }
