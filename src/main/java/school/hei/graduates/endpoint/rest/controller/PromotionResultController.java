@@ -16,25 +16,19 @@ import school.hei.graduates.service.PromotionResultService;
 @AllArgsConstructor
 public class PromotionResultController {
 
-    private final PromotionResultService promotionResultService;
+  private final PromotionResultService promotionResultService;
 
-    @GetMapping("/promotion/{promotionId}/student/{studentId}")
-    public List<SemesterResultResponse> getStudentResults(
-            @PathVariable UUID promotionId,
-            @PathVariable UUID studentId) {
+  @GetMapping("/promotion/{promotionId}/student/{studentId}")
+  public List<SemesterResultResponse> getStudentResults(
+      @PathVariable UUID promotionId, @PathVariable UUID studentId) {
 
-        return promotionResultService.getStudentResults(
-                promotionId,
-                studentId);
-    }
+    return promotionResultService.getStudentResults(promotionId, studentId);
+  }
 
-    @GetMapping("/promotion/{promotionId}/student/{studentId}/average")
-    public BigDecimal getPromotionAverage(
-            @PathVariable UUID promotionId,
-            @PathVariable UUID studentId) {
+  @GetMapping("/promotion/{promotionId}/student/{studentId}/average")
+  public BigDecimal getPromotionAverage(
+      @PathVariable UUID promotionId, @PathVariable UUID studentId) {
 
-        return promotionResultService.calculatePromotionAverage(
-                promotionId,
-                studentId);
-    }
+    return promotionResultService.calculatePromotionAverage(promotionId, studentId);
+  }
 }

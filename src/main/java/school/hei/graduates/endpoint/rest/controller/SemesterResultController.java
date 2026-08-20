@@ -16,17 +16,14 @@ import school.hei.graduates.service.SemesterResultService;
 @AllArgsConstructor
 public class SemesterResultController {
 
-    private final SemesterResultService semesterResultService;
+  private final SemesterResultService semesterResultService;
 
-    @GetMapping("/student/{studentId}")
-    public SemesterResultResponse getResult(
-            @PathVariable UUID studentId,
-            @RequestParam String academicYear,
-            @RequestParam Semester semester) {
+  @GetMapping("/student/{studentId}")
+  public SemesterResultResponse getResult(
+      @PathVariable UUID studentId,
+      @RequestParam String academicYear,
+      @RequestParam Semester semester) {
 
-        return semesterResultService.getResult(
-                studentId,
-                academicYear,
-                semester);
-    }
+    return semesterResultService.getResult(studentId, academicYear, semester);
+  }
 }
